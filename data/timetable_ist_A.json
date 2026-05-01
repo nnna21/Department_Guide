@@ -1,0 +1,101 @@
+{
+    "schedule": {
+        "Monday": {
+            "classes": [
+                {
+                    "time_start": "13:00",
+                    "time_end": "14:00",
+                    "subject": "Information Security",
+                    "teacher": "Sir Ali Hammand Akbar",
+                    "room": "IST 101"
+                },
+                {
+                    "time_start": "14:00",
+                    "time_end": "15:00",
+                    "subject": "Network Security",
+                    "teacher": "Sir Faisal Hayat",
+                    "room": "IST 101"
+                },
+                {
+                    "time_start": "16:00",
+                    "time_end": "17:00",
+                    "subject": "Cryptography",
+                    "teacher": "Sir Rashid",
+                    "room": "IST 102"
+                }
+            ]
+        },
+        "Tuesday": {
+            "classes": [
+                {
+                    "time_start": "13:00",
+                    "time_end": "14:00",
+                    "subject": "Digital Forensics",
+                    "teacher": "Sir Ali Hammand Akbar",
+                    "room": "IST 103"
+                },
+                {
+                    "time_start": "16:00",
+                    "time_end": "17:00",
+                    "subject": "Security Lab",
+                    "teacher": "Sir Afeef",
+                    "room": "IST 006 (Lab)"
+                }
+            ]
+        },
+        "Wednesday": {
+            "classes": [
+                {
+                    "time_start": "13:00",
+                    "time_end": "14:00",
+                    "subject": "Web Security",
+                    "teacher": "Mam Hina",
+                    "room": "IST 101"
+                },
+                {
+                    "time_start": "14:00",
+                    "time_end": "15:00",
+                    "subject": "Ethical Hacking",
+                    "teacher": "Sir Rashid",
+                    "room": "IST 101"
+                },
+                {
+                    "time_start": "16:00",
+                    "time_end": "17:00",
+                    "subject": "Network Lab",
+                    "teacher": "Sir Faisal Hayat",
+                    "room": "IST 007 (Lab)"
+                }
+            ]
+        },
+        "Thursday": {
+            "classes": [
+                {
+                    "time_start": "13:00",
+                    "time_end": "14:00",
+                    "subject": "Operating Systems",
+                    "teacher": "Sir Asad",
+                    "room": "IST 104"
+                },
+                {
+                    "time_start": "16:00",
+                    "time_end": "17:00",
+                    "subject": "Forensics Lab",
+                    "teacher": "Sir Ali Hammand Akbar",
+                    "room": "IST 006 (Lab)"
+                }
+            ]
+        },
+        "Friday": {
+            "classes": [
+                {
+                    "time_start": "13:00",
+                    "time_end": "14:00",
+                    "subject": "Professional Ethics",
+                    "teacher": "Sir Qamar",
+                    "room": "IST 105"
+                }
+            ]
+        }
+    }
+}

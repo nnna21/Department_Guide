@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Timetable - {{ filename }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0f17 0%, #1a1a2e 100%);
+            color: #e0e0ff;
+            padding: 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 15px; }
+        .logo { font-size: 1.8rem; font-weight: 700; background: linear-gradient(135deg, #ae6717, #c47a2a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .section-card { background: rgba(255,255,255,0.05); border-radius: 24px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        .section-title { font-size: 1.3rem; margin-bottom: 20px; color: #ae6717; }
+        .day-card { background: rgba(255,255,255,0.03); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+        .day-header { font-size: 1.2rem; font-weight: 600; margin-bottom: 15px; color: #ae6717; }
+        .class-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+        .class-row input, .class-row select { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 8px; color: #e0e0ff; flex: 1; min-width: 120px; }
+        .class-row input:focus { outline: none; border-color: #ae6717; }
+        .btn { padding: 10px 20px; border-radius: 30px; text-decoration: none; font-weight: 500; cursor: pointer; border: none; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #ae6717, #c47a2a); color: white; }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: #e0e0ff; }
+        .btn-danger { background: rgba(239,68,68,0.2); color: #ef4444; }
+        .btn-sm { padding: 5px 12px; font-size: 0.8rem; }
+        .add-btn { margin-top: 10px; }
+        .action-buttons { display: flex; gap: 15px; justify-content: flex-end; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">✏️ Editing: {{ filename }}</div>
+            <a href="/admin/data" class="btn btn-secondary">← Back to Dashboard</a>
+        </header>
+
+        <form method="POST">
+            {% for day, data in data.schedule.items() %}
+            <div class="day-card">
+                <div class="day-header">{{ day }}</div>
+                <div id="classes-{{ day }}">
+                    {% for class in data.classes %}
+                    <div class="class-row">
+                        <input type="time" name="{{ day }}_{{ loop.index0 }}_time_start" value="{{ class.time_start }}" placeholder="Start Time">
+                        <input type="time" name="{{ day }}_{{ loop.index0 }}_time_end" value="{{ class.time_end }}" placeholder="End Time">
+                        <input type="text" name="{{ day }}_{{ loop.index0 }}_subject" value="{{ class.subject }}" placeholder="Subject">
+                        <input type="text" name="{{ day }}_{{ loop.index0 }}_teacher" value="{{ class.teacher }}" placeholder="Teacher">
+                        <input type="text" name="{{ day }}_{{ loop.index0 }}_room" value="{{ class.room }}" placeholder="Room">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">Remove</button>
+                    </div>
+                    {% endfor %}
+                </div>
+                <button type="button" class="btn btn-secondary btn-sm add-btn" onclick="addClass('{{ day }}')">+ Add Class</button>
+                <input type="hidden" name="{{ day }}_count" id="{{ day }}_count" value="{{ data.classes|length }}">
+            </div>
+            {% endfor %}
+
+            <div class="action-buttons">
+                <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+                <a href="/admin/data" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function addClass(day) {
+            const container = document.getElementById(`classes-${day}`);
+            const count = container.children.length;
+            const newRow = document.createElement('div');
+            newRow.className = 'class-row';
+            newRow.innerHTML = `
+                <input type="time" name="${day}_${count}_time_start" placeholder="Start Time">
+                <input type="time" name="${day}_${count}_time_end" placeholder="End Time">
+                <input type="text" name="${day}_${count}_subject" placeholder="Subject">
+                <input type="text" name="${day}_${count}_teacher" placeholder="Teacher">
+                <input type="text" name="${day}_${count}_room" placeholder="Room">
+                <button type="button" class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">Remove</button>
+            `;
+            container.appendChild(newRow);
+            document.getElementById(`${day}_count`).value = count + 1;
+        }
+    </script>
+</body>
+</html>

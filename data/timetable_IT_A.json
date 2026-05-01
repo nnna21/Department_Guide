@@ -1,0 +1,15 @@
+{
+    "schedule": {
+        "Monday": {
+            "classes": [
+                {
+                    "time_start": "13:02",
+                    "time_end": "15:03",
+                    "subject": "Digital Logic Design",
+                    "teacher": "Sir Afeef",
+                    "room": "CE 201"
+                }
+            ]
+        }
+    }
+}

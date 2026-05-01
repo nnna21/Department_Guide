@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Department Portal - UET Lahore</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(160deg, #c2e9fb 0%, #cef0fa 40%, #b8e4f5 70%, #a1d8f0 100%);
+            color: #1a2d3d;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -15%;
+            left: -10%;
+            width: 55%;
+            height: 55%;
+            background: radial-gradient(circle, rgba(200,240,255,0.7) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -10%;
+            right: -10%;
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(circle, rgba(160,220,245,0.5) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 8vw, 4rem);
+            font-weight: 900;
+            color: #1a3a52;
+            margin-bottom: 15px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #4a7a95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Cards grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 10px;
+        }
+
+        /* Card styling */
+        .card {
+            background: rgba(255, 255, 255, 0.60);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 24px;
+            padding: 25px 20px;
+            border: 1.5px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 8px 32px rgba(100,180,220,0.15), 0 2px 8px rgba(100,180,220,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 48px rgba(80,160,210,0.22), 0 4px 16px rgba(80,160,210,0.12);
+        }
+
+        .card-icon {
+            width: 100%;
+            height: 155px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(200,238,255,0.35), rgba(220,245,255,0.18));
+            overflow: hidden;
+        }
+
+        .card-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: #1a2d3d;
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            color: #4a7a95;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            flex-grow: 1;
+        }
+
+        .card-features {
+            list-style: none;
+            margin: 10px 0;
+        }
+
+        .card-features li {
+            margin: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #3a6a85;
+            font-size: 0.85rem;
+        }
+
+        .card-features li::before {
+            content: "•";
+            color: #4bafd6;
+            font-weight: bold;
+            font-size: 1.3rem;
+            line-height: 1;
+        }
+
+        .card-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.80);
+            color: #2a8ab5;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: background 0.2s, box-shadow 0.2s;
+            text-align: center;
+            font-size: 0.9rem;
+            border: 1.5px solid rgba(75,175,214,0.3);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(75,175,214,0.10);
+        }
+
+        .card-button:hover {
+            background: rgba(75,175,214,0.12);
+            box-shadow: 0 4px 16px rgba(75,175,214,0.2);
+        }
+
+        /* Stats bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 40px;
+            flex-wrap: wrap;
+            border: 1.5px solid rgba(255,255,255,0.85);
+            box-shadow: 0 4px 20px rgba(100,180,220,0.12);
+        }
+
+        .stat-item {
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2a8ab5;
+        }
+
+        .stat-label {
+            color: #5a8aa5;
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 15px; }
+            .cards-grid { gap: 15px; padding: 5px; }
+            .card { padding: 20px 15px; }
+            .card-icon { height: 130px; }
+            .stats-bar { gap: 15px; padding: 15px; }
+            .stat-number { font-size: 1.5rem; }
+            .stat-label { font-size: 0.75rem; }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .cards-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .card { transition: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Department Portal</h1>
+            <p>Welcome to the Department of Computer engineering </p>
+        </div>
+
+        <div class="cards-grid">
+
+            <!-- Department Guide Card -->
+            <a href="/guide" class="card">
+                <div class="card-icon">
+                    <svg viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="globeG" cx="38%" cy="32%"><stop offset="0%" stop-color="#7dd3fc"/><stop offset="100%" stop-color="#2a8ab5"/></radialGradient>
+                            <linearGradient id="bookB" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5bb8e8"/><stop offset="100%" stop-color="#2a7fb0"/></linearGradient>
+                            <linearGradient id="bookT" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#81e0c8"/><stop offset="100%" stop-color="#2ab5a0"/></linearGradient>
+                            <radialGradient id="compG" cx="35%" cy="30%"><stop offset="0%" stop-color="#e0f4ff"/><stop offset="100%" stop-color="#a0cce0"/></radialGradient>
+                        </defs>
+                        <ellipse cx="125" cy="148" rx="85" ry="10" fill="rgba(100,180,220,0.13)"/>
+                        <!-- Globe -->
+                        <circle cx="78" cy="98" r="33" fill="url(#globeG)"/>
+                        <ellipse cx="78" cy="98" rx="15" ry="33" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.2"/>
+                        <line x1="45" y1="98" x2="111" y2="98" stroke="rgba(255,255,255,0.3)" stroke-width="1.2"/>
+                        <line x1="48" y1="83" x2="108" y2="83" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+                        <line x1="48" y1="113" x2="108" y2="113" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+                        <ellipse cx="68" cy="82" rx="10" ry="5" fill="rgba(255,255,255,0.22)" transform="rotate(-15 68 82)"/>
+                        <!-- Book back -->
+                        <rect x="98" y="42" width="72" height="92" rx="6" fill="url(#bookB)" transform="rotate(-9 134 88)"/>
+                        <rect x="98" y="42" width="9" height="92" rx="4" fill="rgba(255,255,255,0.28)" transform="rotate(-9 134 88)"/>
+                        <rect x="112" y="58" width="42" height="5" rx="2.5" fill="rgba(255,255,255,0.55)" transform="rotate(-9 134 88)"/>
+                        <rect x="112" y="69" width="32" height="3.5" rx="2" fill="rgba(255,255,255,0.38)" transform="rotate(-9 134 88)"/>
+                        <rect x="112" y="78" width="37" height="3.5" rx="2" fill="rgba(255,255,255,0.38)" transform="rotate(-9 134 88)"/>
+                        <rect x="112" y="87" width="27" height="3.5" rx="2" fill="rgba(255,255,255,0.28)" transform="rotate(-9 134 88)"/>
+                        <!-- Book front -->
+                        <rect x="148" y="58" width="54" height="74" rx="5" fill="url(#bookT)" transform="rotate(7 175 95)"/>
+                        <rect x="148" y="58" width="8" height="74" rx="3" fill="rgba(255,255,255,0.22)" transform="rotate(7 175 95)"/>
+                        <!-- Compass -->
+                        <circle cx="82" cy="133" r="19" fill="url(#compG)"/>
+                        <circle cx="82" cy="133" r="16" fill="none" stroke="rgba(100,160,190,0.5)" stroke-width="1"/>
+                        <polygon points="82,120 86,133 82,146 78,133" fill="#ef4444" opacity="0.85"/>
+                        <polygon points="82,120 86,133 82,146 78,133" fill="rgba(255,255,255,0.35)" clip-path="inset(50% 0 0 0)"/>
+                        <circle cx="82" cy="133" r="3" fill="white" opacity="0.9"/>
+                    </svg>
+                </div>
+                <h2>Department Guide</h2>
+                <p>Access timetables, teacher information, announcements, and important locations.</p>
+                <ul class="card-features">
+                    <li>Daily class schedules</li>
+                    <li>Teacher directory</li>
+                    <li>Latest announcements</li>
+                    <li>Campus locations</li>
+                </ul>
+                <span class="card-button">View Guide →</span>
+            </a>
+
+            <!-- Faculty Chat Card -->
+            <a href="/faculty-chat" class="card">
+                <div class="card-icon">
+                    <svg viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="cb1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="rgba(255,255,255,0.78)"/><stop offset="100%" stop-color="rgba(210,240,255,0.65)"/></linearGradient>
+                            <linearGradient id="cb2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="rgba(255,255,255,0.62)"/><stop offset="100%" stop-color="rgba(195,232,252,0.55)"/></linearGradient>
+                            <radialGradient id="avG" cx="40%" cy="35%"><stop offset="0%" stop-color="#f0c090"/><stop offset="100%" stop-color="#c07840"/></radialGradient>
+                        </defs>
+                        <ellipse cx="130" cy="149" rx="82" ry="10" fill="rgba(100,180,220,0.12)"/>
+                        <!-- Main bubble -->
+                        <rect x="52" y="28" width="138" height="88" rx="24" fill="url(#cb1)" stroke="rgba(255,255,255,0.9)" stroke-width="1.5"/>
+                        <polygon points="76,116 62,142 110,116" fill="url(#cb1)"/>
+                        <ellipse cx="90" cy="47" rx="30" ry="11" fill="rgba(255,255,255,0.28)" transform="rotate(-8 90 47)"/>
+                        <!-- Small top-right bubble -->
+                        <rect x="160" y="12" width="72" height="50" rx="16" fill="url(#cb2)" stroke="rgba(255,255,255,0.7)" stroke-width="1.2"/>
+                        <polygon points="205,62 220,78 202,62" fill="url(#cb2)"/>
+                        <!-- Avatar -->
+                        <circle cx="102" cy="82" r="21" fill="url(#avG)" stroke="rgba(255,255,255,0.75)" stroke-width="2.5"/>
+                        <circle cx="102" cy="76" r="8" fill="rgba(255,255,255,0.5)"/>
+                        <ellipse cx="102" cy="93" rx="11" ry="6" fill="rgba(255,255,255,0.32)"/>
+                        <!-- Three dots in bubble -->
+                        <circle cx="143" cy="70" r="5" fill="rgba(75,175,214,0.5)"/>
+                        <circle cx="158" cy="70" r="5" fill="rgba(75,175,214,0.5)"/>
+                        <circle cx="173" cy="70" r="5" fill="rgba(75,175,214,0.5)"/>
+                        <!-- Status labels -->
+                        <circle cx="46" cy="44" r="7" fill="#4ade80"/><circle cx="46" cy="44" r="4.5" fill="#16a34a"/>
+                        <text x="58" y="49" font-size="10" fill="#166534" font-family="Inter,sans-serif" font-weight="600">online</text>
+                        <circle cx="46" cy="108" r="7" fill="#4ade80"/><circle cx="46" cy="108" r="4.5" fill="#16a34a"/>
+                        <text x="58" y="113" font-size="10" fill="#166534" font-family="Inter,sans-serif" font-weight="600">online</text>
+                        <circle cx="163" cy="22" r="7" fill="#9ca3af"/><circle cx="163" cy="22" r="4.5" fill="#6b7280"/>
+                        <text x="175" y="27" font-size="10" fill="#374151" font-family="Inter,sans-serif" font-weight="600">offline</text>
+                    </svg>
+                </div>
+                <h2>Faculty Chat</h2>
+                <p>Real-time messaging and file sharing for faculty members on the local network.</p>
+                <ul class="card-features">
+                    <li>Instant messaging</li>
+                    <li>File sharing (PDF, DOC, images)</li>
+                    <li>Auto-delete messages daily</li>
+                    <li>Completely offline</li>
+                </ul>
+                <span class="card-button">Open Chat →</span>
+            </a>
+
+            <!-- Submit Application Card -->
+            <a href="/submit" class="card">
+                <div class="card-icon">
+                    <svg viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="plateG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(170,215,238,0.55)"/><stop offset="100%" stop-color="rgba(130,185,215,0.25)"/></linearGradient>
+                            <radialGradient id="upCirc" cx="40%" cy="35%"><stop offset="0%" stop-color="#60c8f0"/><stop offset="100%" stop-color="#1e88c0"/></radialGradient>
+                            <filter id="docShadow"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="rgba(80,160,210,0.18)"/></filter>
+                        </defs>
+                        <ellipse cx="120" cy="148" rx="80" ry="10" fill="rgba(100,180,220,0.13)"/>
+                        <!-- Stacked docs -->
+                        <rect x="72" y="58" width="72" height="90" rx="8" fill="rgba(205,232,248,0.78)" stroke="rgba(255,255,255,0.65)" stroke-width="1.5" filter="url(#docShadow)"/>
+                        <rect x="78" y="52" width="72" height="90" rx="8" fill="rgba(220,242,255,0.85)" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
+                        <rect x="84" y="46" width="72" height="90" rx="8" fill="white" stroke="rgba(190,228,248,0.75)" stroke-width="1.5"/>
+                        <!-- Doc lines -->
+                        <rect x="97" y="64" width="46" height="5" rx="2.5" fill="#b0d4e8"/>
+                        <rect x="97" y="75" width="36" height="3.5" rx="2" fill="#cce4f5"/>
+                        <rect x="97" y="83" width="42" height="3.5" rx="2" fill="#cce4f5"/>
+                        <rect x="97" y="91" width="30" height="3.5" rx="2" fill="#cce4f5"/>
+                        <!-- Upload glow ring -->
+                        <circle cx="120" cy="100" r="34" fill="rgba(75,175,214,0.08)"/>
+                        <!-- Upload circle -->
+                        <circle cx="120" cy="100" r="27" fill="url(#upCirc)"/>
+                        <circle cx="120" cy="100" r="27" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="1.8"/>
+                        <!-- Arrow -->
+                        <line x1="120" y1="113" x2="120" y2="87" stroke="white" stroke-width="3.8" stroke-linecap="round"/>
+                        <polyline points="110,97 120,87 130,97" stroke="white" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        <!-- Shine -->
+                        <ellipse cx="112" cy="92" rx="8" ry="5" fill="rgba(255,255,255,0.3)" transform="rotate(-30 112 92)"/>
+                        <!-- File type badges -->
+                        <rect x="170" y="28" width="38" height="30" rx="8" fill="#ef4444"/><text x="175" y="48" font-size="10" fill="white" font-family="Inter,sans-serif" font-weight="800">PDF</text>
+                        <rect x="170" y="65" width="38" height="30" rx="8" fill="#3b82f6"/><text x="174" y="85" font-size="10" fill="white" font-family="Inter,sans-serif" font-weight="800">DOC</text>
+                        <rect x="50" y="28" width="38" height="30" rx="8" fill="#10b981"/><text x="56" y="48" font-size="10" fill="white" font-family="Inter,sans-serif" font-weight="800">IMG</text>
+                        <rect x="170" y="102" width="38" height="30" rx="8" fill="#8b5cf6"/><text x="173" y="122" font-size="9" fill="white" font-family="Inter,sans-serif" font-weight="800">IMG</text>
+                    </svg>
+                </div>
+                <h2>Submit Application</h2>
+                <p>Submit applications, assignments, or documents to the department office.</p>
+                <ul class="card-features">
+                    <li>Upload documents (PDF, DOC, images)</li>
+                    <li>Leave requests & applications</li>
+                    <li>Assignment submissions</li>
+                    <li>Get confirmation receipt</li>
+                </ul>
+                <span class="card-button">Start Submission →</span>
+            </a>
+
+            <!-- Track Submissions Card -->
+            <a href="/my-submissions" class="card">
+                <div class="card-icon">
+                    <svg viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="magG" cx="40%" cy="35%"><stop offset="0%" stop-color="#60c8f0"/><stop offset="100%" stop-color="#1a7aaa"/></radialGradient>
+                            <filter id="docSh2"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="rgba(80,155,205,0.15)"/></filter>
+                        </defs>
+                        <ellipse cx="130" cy="149" rx="82" ry="10" fill="rgba(100,180,220,0.12)"/>
+                        <!-- Document -->
+                        <rect x="62" y="28" width="96" height="122" rx="10" fill="white" stroke="rgba(175,218,240,0.7)" stroke-width="1.5" filter="url(#docSh2)"/>
+                        <!-- Fold corner -->
+                        <polygon points="140,28 158,28 158,46" fill="rgba(200,230,248,0.6)"/>
+                        <line x1="140" y1="28" x2="140" y2="46" stroke="rgba(175,218,240,0.5)" stroke-width="1"/>
+                        <line x1="140" y1="46" x2="158" y2="46" stroke="rgba(175,218,240,0.5)" stroke-width="1"/>
+                        <!-- Lines -->
+                        <rect x="76" y="54" width="68" height="5.5" rx="2.5" fill="#b0d4e8"/>
+                        <rect x="76" y="66" width="52" height="4" rx="2" fill="#d0eaf8"/>
+                        <rect x="76" y="76" width="60" height="4" rx="2" fill="#d0eaf8"/>
+                        <rect x="76" y="86" width="46" height="4" rx="2" fill="#d0eaf8"/>
+                        <rect x="76" y="96" width="55" height="4" rx="2" fill="#d0eaf8"/>
+                        <!-- Status badges -->
+                        <rect x="118" y="50" width="58" height="23" rx="12" fill="#22c55e"/>
+                        <text x="125" y="66" font-size="9.5" fill="white" font-family="Inter,sans-serif" font-weight="700">Approved</text>
+                        <rect x="118" y="82" width="50" height="23" rx="12" fill="#f59e0b"/>
+                        <text x="127" y="98" font-size="9.5" fill="white" font-family="Inter,sans-serif" font-weight="700">Pending</text>
+                        <!-- Magnifier -->
+                        <circle cx="162" cy="120" r="30" fill="url(#magG)"/>
+                        <circle cx="162" cy="120" r="30" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.5"/>
+                        <circle cx="158" cy="116" r="19" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="4.5"/>
+                        <line x1="172" y1="130" x2="186" y2="144" stroke="rgba(255,255,255,0.9)" stroke-width="5.5" stroke-linecap="round"/>
+                        <!-- Shine -->
+                        <ellipse cx="150" cy="108" rx="9" ry="5.5" fill="rgba(255,255,255,0.32)" transform="rotate(-30 150 108)"/>
+                    </svg>
+                </div>
+                <h2>Track Submissions</h2>
+                <p>Check the status of your submitted applications and documents instantly.</p>
+                <ul class="card-features">
+                    <li>View your submission history</li>
+                    <li>Check approval status</li>
+                    <li>Track by email address</li>
+                    <li>Real-time updates</li>
+                </ul>
+                <span class="card-button">Track Now →</span>
+            </a>
+
+            <!-- Admin Panel Card -->
+            <a href="/submissions" class="card">
+                <div class="card-icon">
+                    <svg viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="bldG" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7ecde9"/><stop offset="100%" stop-color="#3a9dc5"/></linearGradient>
+                            <linearGradient id="roofG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a8e0f5"/><stop offset="100%" stop-color="#58bde0"/></linearGradient>
+                            <linearGradient id="doorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2a7ab0"/><stop offset="100%" stop-color="#1a5a8a"/></linearGradient>
+                            <filter id="bldSh"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="rgba(50,140,190,0.2)"/></filter>
+                        </defs>
+                        <ellipse cx="130" cy="149" rx="85" ry="10" fill="rgba(100,180,220,0.13)"/>
+                        <!-- Building -->
+                        <rect x="62" y="52" width="136" height="96" rx="7" fill="url(#bldG)" filter="url(#bldSh)"/>
+                        <rect x="57" y="44" width="146" height="16" rx="5" fill="url(#roofG)"/>
+                        <!-- Shine on building -->
+                        <rect x="62" y="52" width="32" height="96" rx="5" fill="rgba(255,255,255,0.13)"/>
+                        <!-- Windows row 1 -->
+                        <rect x="76" y="70" width="22" height="20" rx="4" fill="rgba(255,255,255,0.72)"/>
+                        <rect x="109" y="70" width="22" height="20" rx="4" fill="rgba(255,255,255,0.72)"/>
+                        <rect x="142" y="70" width="22" height="20" rx="4" fill="rgba(255,255,255,0.72)"/>
+                        <!-- Windows row 2 -->
+                        <rect x="76" y="100" width="22" height="20" rx="4" fill="rgba(255,255,255,0.52)"/>
+                        <rect x="109" y="100" width="22" height="20" rx="4" fill="rgba(255,255,255,0.52)"/>
+                        <rect x="142" y="100" width="22" height="20" rx="4" fill="rgba(255,255,255,0.52)"/>
+                        <!-- Door -->
+                        <rect x="113" y="120" width="34" height="28" rx="5" fill="url(#doorG)"/>
+                        <circle cx="142" cy="136" r="3" fill="rgba(255,255,255,0.8)"/>
+                        <!-- Flagpole -->
+                        <line x1="130" y1="14" x2="130" y2="46" stroke="rgba(160,205,225,0.9)" stroke-width="2.5" stroke-linecap="round"/>
+                        <rect x="130" y="14" width="26" height="16" rx="3" fill="#ef4444"/>
+                        <line x1="130" y1="22" x2="156" y2="22" stroke="white" stroke-width="1.8"/>
+                        <line x1="143" y1="14" x2="143" y2="30" stroke="white" stroke-width="1.8"/>
+                    </svg>
+                </div>
+                <h2>Admin Panel</h2>
+                <p>Manage and review all submitted applications and documents (Admin only).</p>
+                <ul class="card-features">
+                    <li>View all submissions</li>
+                    <li>Download documents</li>
+                    <li>Update status</li>
+                    <li>Monitor pending requests</li>
+                </ul>
+                <span class="card-button">Admin Login →</span>
+            </a>
+
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Faculty Members</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">120+</div>
+                <div class="stat-label">Courses</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">1000+</div>
+                <div class="stat-label">Students</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Portal Access</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

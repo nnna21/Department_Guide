@@ -1,0 +1,28 @@
+{
+    "announcements": [
+        {
+            "title": "Library Hours",
+            "description": "Now open until 4 PM during exams",
+            "badge": "UPDATE",
+            "badge_type": "info"
+        },
+        {
+            "title": "Exam Schedule",
+            "description": "Mid exams start April 07",
+            "badge": "IMPORTANT",
+            "badge_type": "info"
+        },
+        {
+            "title": "CM Punjab Laptop Scheme",
+            "description": "CM laptop Scheme Submissions Closed ",
+            "badge": "Info",
+            "badge_type": "info"
+        },
+        {
+            "title": "Water Valve is Fixed ",
+            "description": "Students Can now drink water ",
+            "badge": "Info",
+            "badge_type": "info"
+        }
+    ]
+}

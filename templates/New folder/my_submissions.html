@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Submissions - Department Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0f17 0%, #1a1a2e 100%);
+            color: #e0e0ff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00d4ff, #ff6ec7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-link {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #00d4ff;
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #00d4ff, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .search-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 30px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .search-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #cbd5e1;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            color: #e0e0ff;
+            font-size: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0,212,255,0.2);
+        }
+
+        .search-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,212,255,0.3);
+        }
+
+        .submissions-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .submission-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .submission-card:hover {
+            border-color: #00d4ff;
+            transform: translateX(5px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .submission-id {
+            font-family: monospace;
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+
+        .status-badge {
+            padding: 4px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 1px solid #f59e0b;
+        }
+
+        .status-approved {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid #10b981;
+        }
+
+        .status-rejected {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+
+        .subject {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #e0e0ff;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .detail-label {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .detail-value {
+            font-weight: 500;
+        }
+
+        .message-box {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border-left: 3px solid #00d4ff;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 30px;
+        }
+
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            color: #cbd5e1;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #94a3b8;
+        }
+
+        .example-note {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0,212,255,0.1);
+            border-radius: 15px;
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .example-note code {
+            background: rgba(0,0,0,0.3);
+            padding: 3px 8px;
+            border-radius: 8px;
+            color: #00d4ff;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #94a3b8;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            border-top-color: #00d4ff;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .back-home {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .back-home a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .back-home a:hover {
+            color: #00d4ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">Department Portal</div>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/guide" class="nav-link">Guide</a>
+                <a href="/submit" class="nav-link">Submit</a>
+            </div>
+        </header>
+
+        <h1 class="page-title">📋 My Submissions</h1>
+
+        <div class="search-card">
+            <div class="search-title">🔍 Enter your email to view your submissions</div>
+            <div class="search-box">
+                <input type="email" id="emailInput" class="search-input" placeholder="your.email@example.com" value="{{ request.args.get('email', '') }}">
+                <button onclick="searchSubmissions()" class="search-btn">Search</button>
+            </div>
+            <div class="example-note">
+                💡 Try: <code>s.smith@school.edu</code> or the email you used when submitting
+            </div>
+        </div>
+
+        <div id="submissionsContainer">
+            <div class="loading" id="loadingIndicator" style="display: none;">Loading your submissions</div>
+            <div id="results"></div>
+        </div>
+
+        <div class="back-home">
+            <a href="/">← Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        // Check if email is in URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const emailParam = urlParams.get('email');
+        if (emailParam) {
+            searchSubmissions();
+        }
+
+        async function searchSubmissions() {
+            const email = document.getElementById('emailInput').value.trim();
+            if (!email) {
+                alert('Please enter your email');
+                return;
+            }
+
+            // Update URL with email parameter (without reloading)
+            const url = new URL(window.location);
+            url.searchParams.set('email', email);
+            window.history.pushState({}, '', url);
+
+            // Show loading
+            document.getElementById('loadingIndicator').style.display = 'block';
+            document.getElementById('results').innerHTML = '';
+
+            try {
+                const response = await fetch(`/api/my-submissions?email=${encodeURIComponent(email)}`);
+                const data = await response.json();
+                
+                document.getElementById('loadingIndicator').style.display = 'none';
+                displaySubmissions(data.submissions);
+            } catch (error) {
+                document.getElementById('loadingIndicator').style.display = 'none';
+                document.getElementById('results').innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">❌</div>
+                        <h3>Error Loading Submissions</h3>
+                        <p>Please try again later</p>
+                    </div>
+                `;
+            }
+        }
+
+        function displaySubmissions(submissions) {
+            const container = document.getElementById('results');
+            
+            if (!submissions || submissions.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📭</div>
+                        <h3>No Submissions Found</h3>
+                        <p>No submissions found for this email address</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '<div class="submissions-grid">';
+            
+            submissions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).forEach(sub => {
+                const date = new Date(sub.timestamp);
+                const formattedDate = date.toLocaleDateString();
+                const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                html += `
+                    <div class="submission-card">
+                        <div class="card-header">
+                            <span class="submission-id">ID: ${sub.id.slice(0, 8)}...</span>
+                            <span class="status-badge status-${sub.status}">${sub.status.toUpperCase()}</span>
+                        </div>
+                        
+                        <div class="subject">${sub.subject}</div>
+                        
+                        <div class="details-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">Department</span>
+                                <span class="detail-value">${sub.department.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Name</span>
+                                <span class="detail-value">${sub.name}</span>
+                            </div>
+                        </div>
+                        
+                        ${sub.message ? `
+                            <div class="message-box">
+                                <strong>Message:</strong><br>
+                                ${sub.message}
+                            </div>
+                        ` : ''}
+                        
+                        <div class="card-footer">
+                            <span>📅 ${formattedDate} at ${formattedTime}</span>
+                            ${sub.filename ? '<span>📎 File attached</span>' : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // Allow Enter key to search
+        document.getElementById('emailInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchSubmissions();
+            }
+        });
+    </script>
+</body>
+</html>

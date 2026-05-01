@@ -1,0 +1,122 @@
+[
+    {
+        "name": "Sir Ali Hammand Akbar",
+        "subject": "Software Engineering / Information Security",
+        "email": "ali.akbar@uet.edu.pk",
+        "phone": "555-0101",
+        "room": "101",
+        "type": "Professor"
+    },
+    {
+        "name": "Mam Sana",
+        "subject": "AICT / Functional English",
+        "email": "sana@uet.edu.pk",
+        "phone": "555-0102",
+        "room": "102",
+        "type": "Lecturer"
+    },
+    {
+        "name": "Sir Afeef",
+        "subject": "DLD / Digital Logic Design",
+        "email": "afeef@uet.edu.pk",
+        "phone": "555-0103",
+        "room": "203",
+        "type": "Teacher & Timetable Manager"
+    },
+    {
+        "name": "Mam Hina Khalid",
+        "subject": "Data Structures / Programming",
+        "email": "hina.khalid@uet.edu.pk",
+        "phone": "555-0104",
+        "room": "105",
+        "type": "Associate Professor"
+    },
+    {
+        "name": "Sir Rashid",
+        "subject": "Networking / Cryptography",
+        "email": "rashid@uet.edu.pk",
+        "phone": "555-0105",
+        "room": "202",
+        "type": "Assistant Professor"
+    },
+    {
+        "name": "Sir Qamar",
+        "subject": "",
+        "email": "qamar@uet.edu.pk",
+        "phone": "555-0106",
+        "room": "104",
+        "type": "Faculty Member"
+    },
+    {
+        "name": "Sir Asad",
+        "subject": "",
+        "email": "asad@uet.edu.pk",
+        "phone": "0300-30302",
+        "room": "109",
+        "type": "Lecturer"
+    },
+    {
+        "name": "Sir Faisal Hayat",
+        "subject": "Computer Networks / Network Security",
+        "email": "faisal.hayat@uet.edu.pk",
+        "phone": "555-0107",
+        "room": "110",
+        "type": "Professor"
+    },
+    {
+        "name": "Dr. Hina Khalid",
+        "subject": "Data Structures & Algorithms",
+        "email": "hina.khalid@uet.edu.pk",
+        "phone": "555-0108",
+        "room": "CE 105",
+        "type": "Associate Professor"
+    },
+    {
+        "name": "Ms. Arooj Arshad",
+        "subject": "Software Engineering / Cyber Security Lab",
+        "email": "arwa.arshad@uet.edu.pk",
+        "phone": "555-0109",
+        "room": "CE 108",
+        "type": "Lecturer"
+    },
+    {
+        "name": "Dr. Ali Hammad",
+        "subject": "Introduction to Cyber Security",
+        "email": "ali.hamnadi@uet.edu.pk",
+        "phone": "555-0110",
+        "room": "CE 110",
+        "type": "Professor"
+    },
+    {
+        "name": "Dr. Ali Owais",
+        "subject": "Linear Algebra",
+        "email": "ali.owais@uet.edu.pk",
+        "phone": "555-0111",
+        "room": "CE 111",
+        "type": "Professor"
+    },
+    {
+        "name": "Ms. Kainat",
+        "subject": "Programming Lab / Networks Lab",
+        "email": "kainat@uet.edu.pk",
+        "phone": "555-0112",
+        "room": "Lab CE 102",
+        "type": "Lab Instructor"
+    },
+    {
+        "name": "Sir Mohsin ",
+        "subject": "Programming ",
+        "email": "nothing@gmail.com",
+        "phone": "3321313",
+        "room": "CE112",
+        "type": "lecturer"
+    },
+    {
+        "name": "Sir Kashif Javeed",
+        "subject": "Electrical ",
+        "email": "kasifjaved@gmail.com",
+        "phone": "23232323",
+        "room": "CE112",
+        "type": "Chairman"
+    }
+]

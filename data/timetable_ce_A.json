@@ -1,0 +1,108 @@
+{
+    "schedule": {
+        "Monday": {
+            "classes": [
+                {
+                    "time_start": "13:00",
+                    "time_end": "14:00",
+                    "subject": "Digital Logic Design",
+                    "teacher": "Sir Afeef",
+                    "room": "CE 201"
+                },
+                {
+                    "time_start": "14:00",
+                    "time_end": "15:00",
+                    "subject": "Electronic Circuits",
+                    "teacher": "Sir Rashid",
+                    "room": "CE 201"
+                },
+                {
+                    "time_start": "16:00",
+                    "time_end": "17:00",
+                    "subject": "Programming Fundamentals",
+                    "teacher": "Mam Hina",
+                    "room": "CE 102"
+                },
+                {
+                    "time_start": "17:00",
+                    "time_end": "18:30",
+                    "subject": "Hell Subject I guess ",
+                    "teacher": "NO name",
+                    "room": "Gate of hell "
+                }
+            ]
+        },
+        "Tuesday": {
+            "classes": [
+                {
+                    "time_start": "13:00",
+                    "time_end": "14:00",
+                    "subject": "Microprocessor Systems",
+                    "teacher": "Sir Faisal Hayat",
+                    "room": "CE 202"
+                },
+                {
+                    "time_start": "16:00",
+                    "time_end": "17:00",
+                    "subject": "Digital Logic Lab",
+                    "teacher": "Sir Afeef",
+                    "room": "CE 006 (Lab)"
+                }
+            ]
+        },
+        "Wednesday": {
+            "classes": [
+                {
+                    "time_start": "13:00",
+                    "time_end": "14:00",
+                    "subject": "Linear Algebra",
+                    "teacher": "Sir Qamar",
+                    "room": "CE 110"
+                },
+                {
+                    "time_start": "14:00",
+                    "time_end": "15:00",
+                    "subject": "Functional English",
+                    "teacher": "Mam Sana",
+                    "room": "CE 110"
+                },
+                {
+                    "time_start": "16:00",
+                    "time_end": "17:00",
+                    "subject": "Programming Lab",
+                    "teacher": "Mam Hina",
+                    "room": "CE 102 (Lab)"
+                }
+            ]
+        },
+        "Thursday": {
+            "classes": [
+                {
+                    "time_start": "13:00",
+                    "time_end": "14:00",
+                    "subject": "Electronic Circuits Lab",
+                    "teacher": "Sir Rashid",
+                    "room": "CE 007 (Lab)"
+                },
+                {
+                    "time_start": "16:00",
+                    "time_end": "17:00",
+                    "subject": "Microprocessor Lab",
+                    "teacher": "Sir Faisal Hayat",
+                    "room": "CE 008 (Lab)"
+                }
+            ]
+        },
+        "Friday": {
+            "classes": [
+                {
+                    "time_start": "13:00",
+                    "time_end": "14:00",
+                    "subject": "Pakistan Studies",
+                    "teacher": "Sir Qamar",
+                    "room": "CE 101"
+                }
+            ]
+        }
+    }
+}

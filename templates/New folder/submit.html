@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Application - Department Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0f17 0%, #1a1a2e 100%);
+            color: #e0e0ff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #00d4ff, #ff6ec7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .back-link {
+            color: #94a3b8;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: #00d4ff;
+        }
+
+        /* Form Card */
+        .form-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 40px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #00d4ff, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            color: #e0e0ff;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0,212,255,0.2);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        input[type="file"]::file-selector-button {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            margin-right: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0,212,255,0.3);
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        select option {
+            background: #1a1a2e;
+            color: #e0e0ff;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .file-info {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .file-info i {
+            color: #00d4ff;
+            margin-right: 5px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,212,255,0.4);
+        }
+
+        /* Success Message */
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid #10b981;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .success-message .success-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981, #059669);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .success-message h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #10b981;
+        }
+
+        .success-message p {
+            color: #94a3b8;
+            margin-bottom: 25px;
+        }
+
+        .success-message .receipt-id {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 15px;
+            font-family: monospace;
+            font-size: 1.1rem;
+            margin: 20px 0;
+            color: #00d4ff;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            background: rgba(255,255,255,0.05);
+            color: #e0e0ff;
+            text-decoration: none;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            border-color: #00d4ff;
+            transform: translateY(-2px);
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            border: none;
+            color: white;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 768px) {
+            .form-card {
+                padding: 25px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">Department Portal</div>
+            <a href="/" class="back-link">← Back to Home</a>
+        </header>
+
+        {% if success %}
+            <!-- Success Message -->
+            <div class="success-message">
+                <div class="success-icon">✓</div>
+                <h2>Submission Successful!</h2>
+                <p>Your application has been submitted successfully. A confirmation has been sent to your email.</p>
+                <div class="receipt-id">
+                    📋 Receipt ID: SUB-{{ range(100000, 999999) | random }}
+                </div>
+                <div class="action-buttons">
+                    <a href="/submit" class="action-btn">Submit Another</a>
+                    <a href="/guide" class="action-btn primary">View Guide</a>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="form-card">
+            <h1 class="form-title">Submit Application</h1>
+            
+            <form method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" name="name" required placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address *</label>
+                    <input type="email" name="email" required placeholder="you@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Department *</label>
+                    <select name="department" required>
+                        <option value="">Select Department</option>
+			<option value="computer_engineering">Computer Engineering</option>
+                        <option value="information_technology">Information Technology</option>
+                        <option value="software_engineering">Software Engineering</option>
+			<option value="computer_science">Computer Science</option>
+                        <option value="data_science">Data Science</option>
+			
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Subject *</label>
+                    <input type="text" name="subject" required placeholder="e.g., Leave Application, Assignment Submission">
+                </div>
+
+                <div class="form-group">
+                    <label>Message / Description</label>
+                    <textarea name="message" placeholder="Provide details about your submission..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Attach Document (Optional)</label>
+                    <input type="file" name="file" accept=".pdf,.doc,.docx,.txt,.jpg,.png,.zip">
+                    <div class="file-info">
+                        <i>ℹ️</i> Supported formats: PDF, DOC, DOCX, TXT, JPG, PNG, ZIP (Max: 16MB)
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit Application</button>
+            </form>
+        </div>
+
+        <div class="footer">
+            <p>Your submission will be processed within 24-48 hours. You will receive a confirmation email with your submission ID.</p>
+        </div>
+    </div>
+</body>
+</html>

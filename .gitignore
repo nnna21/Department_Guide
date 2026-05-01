@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Flask
+instance/
+.webassets-cache
+flask_session/
+
+# Environment
+.env
+.venv
+env/
+venv/
+
+# Data files with sensitive info
+data/config.json
+data/submissions.json
+uploads/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Backup folders
+data/backup_*/
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project

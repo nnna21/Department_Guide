@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Announcements</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(160deg, #c2e9fb 0%, #a1d8f0 100%);
+            color: #1a2d3d;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: -15%;
+            left: -10%;
+            width: 55%;
+            height: 55%;
+            background: radial-gradient(circle, rgba(200,240,255,0.4) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -10%;
+            right: -10%;
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(circle, rgba(160,220,245,0.3) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            position: relative;
+            z-index: 1;
+        }
+        header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 30px; 
+            flex-wrap: wrap; 
+            gap: 15px; 
+        }
+        .logo { 
+            font-size: 1.8rem; 
+            font-weight: 700; 
+            background: linear-gradient(135deg, #2a8ab5, #4bafd6); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        .announcement-card { 
+            background: rgba(255, 255, 255, 0.55); 
+            backdrop-filter: blur(12px);
+            border-radius: 16px; 
+            padding: 20px; 
+            margin-bottom: 15px; 
+            border: 1px solid rgba(75, 175, 214, 0.3); 
+        }
+        .announcement-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 15px; 
+        }
+        .announcement-header span {
+            font-weight: 600;
+            color: #2a8ab5;
+        }
+        .form-group { 
+            margin-bottom: 15px; 
+        }
+        .form-group label { 
+            display: block; 
+            margin-bottom: 5px; 
+            color: #4a7a95; 
+            font-size: 0.85rem; 
+            font-weight: 500;
+        }
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea { 
+            width: 100%; 
+            padding: 10px; 
+            background: rgba(255, 255, 255, 0.7); 
+            border: 1px solid rgba(75, 175, 214, 0.3); 
+            border-radius: 8px; 
+            color: #1a2d3d; 
+            font-family: 'Inter', sans-serif;
+        }
+        .form-group input:focus, 
+        .form-group select:focus, 
+        .form-group textarea:focus { 
+            outline: none; 
+            border-color: #2a8ab5; 
+            background: rgba(255, 255, 255, 0.9);
+        }
+        .form-group textarea { 
+            min-height: 70px; 
+            resize: vertical; 
+        }
+        .btn { 
+            padding: 10px 20px; 
+            border-radius: 30px; 
+            text-decoration: none; 
+            font-weight: 500; 
+            cursor: pointer; 
+            border: none; 
+            transition: all 0.3s; 
+        }
+        .btn-primary { 
+            background: linear-gradient(135deg, #4bafd6, #2a8ab5); 
+            color: white; 
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(42, 138, 181, 0.3);
+        }
+        .btn-secondary { 
+            background: rgba(255, 255, 255, 0.6); 
+            color: #1a2d3d; 
+            border: 1px solid rgba(75, 175, 214, 0.3);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+        .btn-danger { 
+            background: rgba(239, 68, 68, 0.15); 
+            color: #ef4444; 
+            border: 1px solid #ef4444;
+        }
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.25);
+        }
+        .btn-sm { 
+            padding: 5px 12px; 
+            font-size: 0.8rem; 
+        }
+        .action-buttons { 
+            display: flex; 
+            gap: 15px; 
+            justify-content: flex-end; 
+            margin-top: 25px; 
+        }
+        
+        /* Dark mode support */
+        [data-theme="dark"] body {
+            background: linear-gradient(160deg, #0f2a3a 0%, #1a3a4a 100%);
+            color: #e8f0f5;
+        }
+        [data-theme="dark"] .logo {
+            background: linear-gradient(135deg, #4bafd6, #6bc0e8);
+            -webkit-background-clip: text;
+        }
+        [data-theme="dark"] .announcement-card {
+            background: rgba(25, 45, 60, 0.55);
+            border-color: rgba(75, 175, 214, 0.25);
+        }
+        [data-theme="dark"] .announcement-header span {
+            color: #4bafd6;
+        }
+        [data-theme="dark"] .form-group label {
+            color: #b0d0e0;
+        }
+        [data-theme="dark"] .form-group input,
+        [data-theme="dark"] .form-group select,
+        [data-theme="dark"] .form-group textarea {
+            background: rgba(40, 65, 85, 0.7);
+            color: #e8f0f5;
+            border-color: rgba(75, 175, 214, 0.25);
+        }
+        [data-theme="dark"] .form-group input:focus,
+        [data-theme="dark"] .form-group select:focus,
+        [data-theme="dark"] .form-group textarea:focus {
+            background: rgba(50, 75, 95, 0.85);
+            border-color: #4bafd6;
+        }
+        [data-theme="dark"] .btn-secondary {
+            background: rgba(30, 50, 65, 0.5);
+            color: #e8f0f5;
+            border-color: rgba(75, 175, 214, 0.25);
+        }
+        [data-theme="dark"] .btn-secondary:hover {
+            background: rgba(40, 60, 75, 0.7);
+        }
+
+        @media (max-width: 600px) {
+            .announcement-header { flex-direction: column; gap: 10px; align-items: flex-start; }
+            .action-buttons { flex-direction: column; }
+            .action-buttons .btn { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">📢 Edit Announcements</div>
+            <a href="/admin/data" class="btn btn-secondary">← Back to Dashboard</a>
+        </header>
+
+        <form method="POST">
+            <div id="announcements-container">
+                {% for announcement in announcements %}
+                <div class="announcement-card">
+                    <div class="announcement-header">
+                        <span>📌 Announcement {{ loop.index }}</span>
+                        <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.announcement-card').remove()">Remove</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" name="announcement_{{ loop.index0 }}_title" value="{{ announcement.title }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="announcement_{{ loop.index0 }}_description">{{ announcement.description }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Badge Text</label>
+                        <input type="text" name="announcement_{{ loop.index0 }}_badge" value="{{ announcement.badge }}" placeholder="NEW / INFO / UPDATE">
+                    </div>
+                    <div class="form-group">
+                        <label>Badge Type</label>
+                        <select name="announcement_{{ loop.index0 }}_badge_type">
+                            <option value="info" {% if announcement.badge_type == 'info' %}selected{% endif %}>Info (Blue)</option>
+                            <option value="urgent" {% if announcement.badge_type == 'urgent' %}selected{% endif %}>Urgent (Red)</option>
+                            <option value="success" {% if announcement.badge_type == 'success' %}selected{% endif %}>Success (Green)</option>
+                        </select>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div style="margin: 20px 0;">
+                <button type="button" class="btn btn-primary" onclick="addAnnouncement()">+ Add New Announcement</button>
+            </div>
+
+            <input type="hidden" id="announcement_count" name="announcement_count" value="{{ announcements|length }}">
+
+            <div class="action-buttons">
+                <button type="submit" class="btn btn-primary">💾 Save All Changes</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let annIndex = {{ announcements|length }};
+        function addAnnouncement() {
+            const container = document.getElementById('announcements-container');
+            const newCard = document.createElement('div');
+            newCard.className = 'announcement-card';
+            newCard.innerHTML = `
+                <div class="announcement-header">
+                    <span>📌 New Announcement</span>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.announcement-card').remove()">Remove</button>
+                </div>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" name="announcement_${annIndex}_title" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="announcement_${annIndex}_description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Badge Text</label>
+                    <input type="text" name="announcement_${annIndex}_badge" placeholder="NEW / INFO / UPDATE">
+                </div>
+                <div class="form-group">
+                    <label>Badge Type</label>
+                    <select name="announcement_${annIndex}_badge_type">
+                        <option value="info">Info (Blue)</option>
+                        <option value="urgent">Urgent (Red)</option>
+                        <option value="success">Success (Green)</option>
+                    </select>
+                </div>
+            `;
+            container.appendChild(newCard);
+            document.getElementById('announcement_count').value = annIndex + 1;
+            annIndex++;
+        }
+    </script>
+</body>
+</html>

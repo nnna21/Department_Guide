@@ -1,0 +1,19 @@
+#!/bin/sh
+# Router Reset Button Handler
+# Short press (<3s) = Restore website data to default backup
+# Long press (>10s) = BLOCKED — factory reset disabled
+
+SEEN=$1
+
+if [ "$SEEN" -lt 3 ]; then
+    # Short press — restore website data only
+    logger "Reset button pressed — restoring website data to default"
+    cp -rf /root/backup_default/* /root/Router_Project/data/
+    logger "Website data restored successfully"
+elif [ "$SEEN" -ge 10 ]; then
+    # Long press — block factory reset
+    logger "Factory reset attempted and BLOCKED by reset script"
+fi
+
+# Always exit 0 to prevent default OpenWrt factory reset
+exit 0

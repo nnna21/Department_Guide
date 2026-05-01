@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Data Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0f17 0%, #1a1a2e 100%);
+            color: #e0e0ff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ae6717, #c47a2a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-link {
+            color: #94a3b8;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 30px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(174,103,23,0.2);
+            color: #ae6717;
+        }
+
+        .section-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #ae6717;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .timetable-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .timetable-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .timetable-card:hover {
+            border-color: #ae6717;
+            transform: translateY(-2px);
+        }
+
+        .timetable-name {
+            font-weight: 500;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ae6717, #c47a2a);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #e0e0ff;
+        }
+
+        .btn-danger {
+            background: rgba(239,68,68,0.2);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .flash-message {
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .flash-success {
+            background: rgba(16,185,129,0.2);
+            border: 1px solid #10b981;
+            color: #10b981;
+        }
+
+        .flash-warning {
+            background: rgba(239,68,68,0.2);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ae6717;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">📊 Admin Data Management</div>
+            <div class="nav-links">
+                <a href="/submissions" class="nav-link">📋 Submissions</a>
+                <a href="/admin/data" class="nav-link active">📁 Data Manager</a>
+                <a href="/" class="nav-link">🏠 Home</a>
+                <a href="/admin/logout" class="nav-link">🚪 Logout</a>
+            </div>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-number">{{ timetable_files|length }}</div>
+                <div>Timetables</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ teachers|length if teachers else 0 }}</div>
+                <div>Teachers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ announcements|length if announcements else 0 }}</div>
+                <div>Announcements</div>
+            </div>
+        </div>
+
+        <!-- Timetables Section -->
+        <div class="section-card">
+            <div class="section-title">
+                <span>📅</span> Timetables (6 JSON files)
+                <a href="/admin/create_timetable" class="btn btn-primary" style="margin-left: auto;">+ Create New</a>
+            </div>
+            <div class="timetable-grid">
+                {% for file in timetable_files %}
+                <div class="timetable-card">
+                    <span class="timetable-name">{{ file }}</span>
+                    <div class="action-buttons">
+                        <a href="/admin/edit_timetable/{{ file }}" class="btn btn-secondary">✏️ Edit</a>
+                        <a href="/admin/delete_timetable/{{ file }}" class="btn btn-danger" onclick="return confirm('Delete {{ file }}? This cannot be undone!')">🗑️ Delete</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Teachers Section -->
+        <div class="section-card">
+            <div class="section-title">
+                <span>👥</span> Teachers Directory
+                <a href="/admin/edit_teachers" class="btn btn-primary" style="margin-left: auto;">✏️ Edit All</a>
+            </div>
+            <div style="max-height: 300px; overflow-y: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <th style="padding: 10px; text-align: left;">Name</th>
+                            <th style="padding: 10px; text-align: left;">Subject</th>
+                            <th style="padding: 10px; text-align: left;">Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for teacher in teachers %}
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <td style="padding: 8px 10px;">{{ teacher.name }}</td>
+                            <td style="padding: 8px 10px;">{{ teacher.subject }}</td>
+                            <td style="padding: 8px 10px;">{{ teacher.type }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Announcements Section -->
+        <div class="section-card">
+            <div class="section-title">
+                <span>📢</span> Announcements
+                <a href="/admin/edit_announcements" class="btn btn-primary" style="margin-left: auto;">✏️ Edit All</a>
+            </div>
+            {% for announcement in announcements %}
+            <div style="padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <strong>{{ announcement.title }}</strong><br>
+                <span style="color: #94a3b8; font-size: 0.9rem;">{{ announcement.description }}</span>
+                <span class="badge" style="background: {% if announcement.badge_type == 'Urgent' %}#ef4444{% elif announcement.badge_type == 'Success' %}#10b981{% else %}#ae6717{% endif %}; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; margin-left: 10px;">{{ announcement.badge }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Backup Section -->
+        <div class="section-card">
+            <div class="section-title">
+                <span>💾</span> Backup & Recovery
+            </div>
+            <a href="/admin/backup" class="btn btn-primary">Create Backup</a>
+            <span style="color: #94a3b8; margin-left: 15px; font-size: 0.85rem;">Backups are saved in data/backup_* folders</span>
+        </div>
+    </div>
+</body>
+</html>
