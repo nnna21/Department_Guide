@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Department Guide</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🏛️</text></svg>">
+</head>
+<body>
+
+<!-- ═══ Navigation ════════════════════════════════════════════════════════ -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <a class="nav-brand" href="#" onclick="showPage('home')">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+    Department Guide
+  </a>
+
+  <button id="menuToggle" aria-label="Toggle menu" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+
+  <div class="nav-links" id="navLinks">
+    <a class="nav-link active" href="#" onclick="showPage('home')">Home</a>
+    <a class="nav-link" href="#" onclick="showPage('notices')">Notices</a>
+    <a class="nav-link" href="#" onclick="showPage('schedule')">Schedule</a>
+    <a class="nav-link" href="#" onclick="showPage('professors')">Faculty</a>
+    <a class="nav-link" href="#" onclick="showPage('files')">Files</a>
+    <a class="nav-link" href="#" onclick="showPage('applications')">Applications</a>
+    <a class="nav-link" href="#" onclick="showPage('complaints')">Complaints</a>
+    <a class="nav-link" id="adminNavLink" href="#" onclick="showPage('admin')" style="display:none">Admin</a>
+  </div>
+
+  <div class="nav-actions">
+    <span id="userBadge" style="display:none"></span>
+    <button id="loginBtn" onclick="openLoginModal()">Login</button>
+    <button id="logoutBtn" onclick="logout()" style="display:none">Logout</button>
+  </div>
+</nav>
+
+<!-- ═══ Toast container ═══════════════════════════════════════════════════ -->
+<div id="toast-container" aria-live="polite"></div>
+
+<!-- ═══ Login Modal ═══════════════════════════════════════════════════════ -->
+<div class="modal-backdrop hidden" id="loginModal" onclick="closeLoginIfBackdrop(event)">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <h3 id="loginTitle">Staff / Admin Login</h3>
+    <div id="loginAlert"></div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" placeholder="you@department.local" autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeLoginModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="login()">Login</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ HOME ══════════════════════════════════════════════════════════════ -->
+<main id="page-home" class="page active">
+  <div class="hero">
+    <h1>🏛️ Welcome to Department Guide</h1>
+    <p>Your one-stop portal for schedules, faculty contacts, file sharing, applications, and more. Available offline — no internet required.</p>
+  </div>
+
+  <div class="stats-row" id="statsRow">
+    <div class="stat-card" onclick="showPage('notices')">
+      <div class="stat-num" id="statNotices">—</div>
+      <div class="stat-label">Notices</div>
+    </div>
+    <div class="stat-card" onclick="showPage('schedule')">
+      <div class="stat-num" id="statClasses">—</div>
+      <div class="stat-label">Classes This Week</div>
+    </div>
+    <div class="stat-card" onclick="showPage('professors')">
+      <div class="stat-num" id="statProfs">—</div>
+      <div class="stat-label">Faculty Members</div>
+    </div>
+    <div class="stat-card" onclick="showPage('files')">
+      <div class="stat-num" id="statFiles">—</div>
+      <div class="stat-label">Shared Files</div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <h2>Latest Notices</h2>
+    <a class="btn btn-outline btn-sm" href="#" onclick="showPage('notices')">View All →</a>
+  </div>
+  <div id="homeNotices"><div class="spinner"></div></div>
+
+  <div style="margin-top:32px" class="section-header"><h2>Today's Schedule</h2></div>
+  <div id="homeSchedule"><div class="spinner"></div></div>
+</main>
+
+<!-- ═══ NOTICES ═══════════════════════════════════════════════════════════ -->
+<main id="page-notices" class="page">
+  <div class="section-header">
+    <h2>📢 Notices &amp; Announcements</h2>
+    <button class="btn btn-primary btn-sm" id="addNoticeBtn" onclick="openNoticeModal()" style="display:none">+ Add Notice</button>
+  </div>
+  <div id="noticesList"><div class="spinner"></div></div>
+</main>
+
+<!-- Notice modal -->
+<div class="modal-backdrop hidden" id="noticeModal">
+  <div class="modal" role="dialog" aria-modal="true">
+    <h3 id="noticeModalTitle">Add Notice</h3>
+    <input type="hidden" id="noticeEditId">
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="noticeTitle">Title</label>
+        <input type="text" id="noticeTitle" placeholder="Notice title">
+      </div>
+      <div class="form-group">
+        <label for="noticeBody">Content</label>
+        <textarea id="noticeBody" placeholder="Notice content..."></textarea>
+      </div>
+      <div class="form-group">
+        <label for="noticePriority">Priority</label>
+        <select id="noticePriority">
+          <option value="normal">Normal</option>
+          <option value="important">Important</option>
+          <option value="urgent">Urgent</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeNoticeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveNotice()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SCHEDULE ══════════════════════════════════════════════════════════ -->
+<main id="page-schedule" class="page">
+  <div class="section-header">
+    <h2>📅 Class Schedule / Timetable</h2>
+    <button class="btn btn-primary btn-sm" id="addClassBtn" onclick="openClassModal()" style="display:none">+ Add Class</button>
+  </div>
+  <div class="timetable-filters">
+    <select id="filterDay" onchange="loadSchedule()">
+      <option value="">All Days</option>
+      <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+      <option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option>
+    </select>
+    <select id="filterSemester" onchange="loadSchedule()">
+      <option value="">All Semesters</option>
+    </select>
+  </div>
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Day</th><th>Time</th><th>Course</th><th>Code</th>
+            <th>Professor</th><th>Room</th><th>Semester</th>
+            <th id="scheduleActionsHeader" style="display:none">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="scheduleBody"><tr><td colspan="8"><div class="spinner"></div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<!-- Class modal -->
+<div class="modal-backdrop hidden" id="classModal">
+  <div class="modal" role="dialog" aria-modal="true">
+    <h3 id="classModalTitle">Add Class</h3>
+    <input type="hidden" id="classEditId">
+    <div class="form-grid">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="className">Course Name</label>
+          <input type="text" id="className" placeholder="Introduction to Computer Science">
+        </div>
+        <div class="form-group">
+          <label for="classCode">Course Code</label>
+          <input type="text" id="classCode" placeholder="CS101">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="classProfessor">Professor</label>
+          <select id="classProfessor"><option value="">— Select —</option></select>
+        </div>
+        <div class="form-group">
+          <label for="classRoom">Room</label>
+          <input type="text" id="classRoom" placeholder="Room 101">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="classDay">Day</label>
+          <select id="classDay">
+            <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+            <option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="classSemester">Semester</label>
+          <input type="text" id="classSemester" placeholder="Fall 2025">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="classStart">Start Time</label>
+          <input type="time" id="classStart">
+        </div>
+        <div class="form-group">
+          <label for="classEnd">End Time</label>
+          <input type="time" id="classEnd">
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeClassModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveClass()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FACULTY ════════════════════════════════════════════════════════════ -->
+<main id="page-professors" class="page">
+  <div class="section-header">
+    <h2>👩‍🏫 Faculty Directory</h2>
+    <button class="btn btn-primary btn-sm" id="addProfBtn" onclick="openProfModal()" style="display:none">+ Add Faculty</button>
+  </div>
+  <div class="card-grid" id="professorGrid"><div class="spinner"></div></div>
+</main>
+
+<!-- Professor modal -->
+<div class="modal-backdrop hidden" id="profModal">
+  <div class="modal" role="dialog" aria-modal="true">
+    <h3 id="profModalTitle">Add Faculty</h3>
+    <input type="hidden" id="profEditId">
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="profName">Full Name</label>
+        <input type="text" id="profName" placeholder="Dr. Jane Doe">
+      </div>
+      <div class="form-group">
+        <label for="profEmail">Email</label>
+        <input type="email" id="profEmail" placeholder="jane@department.local">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="profPhone">Phone</label>
+          <input type="text" id="profPhone" placeholder="555-0100">
+        </div>
+        <div class="form-group">
+          <label for="profOffice">Office</label>
+          <input type="text" id="profOffice" placeholder="Room 204">
+        </div>
+      </div>
+      <div class="form-group" id="profPasswordGroup">
+        <label for="profPassword">Password</label>
+        <input type="password" id="profPassword" placeholder="Minimum 6 characters">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeProfModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProf()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FILES ═════════════════════════════════════════════════════════════ -->
+<main id="page-files" class="page">
+  <div class="section-header">
+    <h2>📁 File Sharing</h2>
+    <button class="btn btn-primary btn-sm" id="uploadFileBtn" onclick="openUploadModal()" style="display:none">⬆ Upload File</button>
+  </div>
+
+  <div class="timetable-filters" style="margin-bottom:16px">
+    <select id="filterFileCategory" onchange="loadFiles()">
+      <option value="">All Categories</option>
+      <option value="general">General</option>
+      <option value="lecture_notes">Lecture Notes</option>
+      <option value="assignments">Assignments</option>
+      <option value="forms">Forms</option>
+      <option value="policies">Policies</option>
+    </select>
+  </div>
+
+  <div id="filesList"><div class="spinner"></div></div>
+</main>
+
+<!-- Upload modal -->
+<div class="modal-backdrop hidden" id="uploadModal">
+  <div class="modal" role="dialog" aria-modal="true">
+    <h3>Upload File</h3>
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="fileTitle">Title</label>
+        <input type="text" id="fileTitle" placeholder="File title">
+      </div>
+      <div class="form-group">
+        <label for="fileDescription">Description (optional)</label>
+        <input type="text" id="fileDescription" placeholder="Brief description">
+      </div>
+      <div class="form-group">
+        <label for="fileCategory">Category</label>
+        <select id="fileCategory">
+          <option value="general">General</option>
+          <option value="lecture_notes">Lecture Notes</option>
+          <option value="assignments">Assignments</option>
+          <option value="forms">Forms</option>
+          <option value="policies">Policies</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>File (max 50 MB)</label>
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+          <p>Click to select a file or drag &amp; drop here</p>
+          <p id="selectedFileName" style="margin-top:8px;font-weight:600;color:var(--primary)"></p>
+        </div>
+        <input type="file" id="fileInput" style="display:none" onchange="onFileSelected(this)">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeUploadModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="uploadFile()">Upload</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ APPLICATIONS ══════════════════════════════════════════════════════ -->
+<main id="page-applications" class="page">
+  <div class="section-header">
+    <h2>📝 Submit an Application</h2>
+  </div>
+
+  <!-- Guest submission form -->
+  <div class="card" id="appFormCard" style="max-width:600px;margin-bottom:28px">
+    <h3 style="margin-bottom:18px;font-size:1rem">New Application</h3>
+    <div id="appFormAlert"></div>
+    <div class="form-grid">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="appName">Your Name</label>
+          <input type="text" id="appName" placeholder="Full name">
+        </div>
+        <div class="form-group">
+          <label for="appEmail">Your Email</label>
+          <input type="email" id="appEmail" placeholder="you@example.com">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="appType">Application Type</label>
+        <select id="appType">
+          <option value="leave_request">Leave Request</option>
+          <option value="certificate">Certificate Request</option>
+          <option value="transcript">Transcript Request</option>
+          <option value="enrollment">Enrollment</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="appSubject">Subject</label>
+        <input type="text" id="appSubject" placeholder="Application subject">
+      </div>
+      <div class="form-group">
+        <label for="appBody">Details</label>
+        <textarea id="appBody" placeholder="Describe your request in detail..."></textarea>
+      </div>
+    </div>
+    <div style="margin-top:16px">
+      <button class="btn btn-primary" onclick="submitApplication()">Submit Application</button>
+    </div>
+  </div>
+
+  <!-- Check status -->
+  <div class="card" style="max-width:600px;margin-bottom:28px">
+    <h3 style="margin-bottom:12px;font-size:1rem">Check Application Status</h3>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <input type="email" id="appCheckEmail" placeholder="your@email.com" style="flex:1;padding:9px 13px;border:1px solid var(--border);border-radius:6px;font-size:.9rem">
+      <button class="btn btn-outline" onclick="checkApplications()">Check</button>
+    </div>
+    <div id="appStatusList" style="margin-top:14px"></div>
+  </div>
+
+  <!-- Admin view -->
+  <div id="adminAppsSection" style="display:none">
+    <div class="section-header"><h2>All Applications (Admin)</h2></div>
+    <div id="adminAppsList"><div class="spinner"></div></div>
+  </div>
+</main>
+
+<!-- ═══ COMPLAINTS ════════════════════════════════════════════════════════ -->
+<main id="page-complaints" class="page">
+  <div class="section-header">
+    <h2>🗣️ Submit a Complaint / Issue</h2>
+  </div>
+
+  <div class="card" style="max-width:600px;margin-bottom:28px">
+    <h3 style="margin-bottom:18px;font-size:1rem">New Complaint</h3>
+    <div id="complaintFormAlert"></div>
+    <div class="form-grid">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="complaintName">Your Name</label>
+          <input type="text" id="complaintName" placeholder="Full name">
+        </div>
+        <div class="form-group">
+          <label for="complaintEmail">Your Email</label>
+          <input type="email" id="complaintEmail" placeholder="you@example.com">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="complaintCategory">Category</label>
+        <select id="complaintCategory">
+          <option value="academic">Academic</option>
+          <option value="infrastructure">Infrastructure</option>
+          <option value="staff">Staff Conduct</option>
+          <option value="administration">Administration</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="complaintSubject">Subject</label>
+        <input type="text" id="complaintSubject" placeholder="Brief subject">
+      </div>
+      <div class="form-group">
+        <label for="complaintDesc">Description</label>
+        <textarea id="complaintDesc" placeholder="Describe the issue in detail..."></textarea>
+      </div>
+    </div>
+    <div style="margin-top:16px">
+      <button class="btn btn-primary" onclick="submitComplaint()">Submit Complaint</button>
+    </div>
+  </div>
+
+  <!-- Check status -->
+  <div class="card" style="max-width:600px;margin-bottom:28px">
+    <h3 style="margin-bottom:12px;font-size:1rem">Check Complaint Status</h3>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <input type="email" id="complaintCheckEmail" placeholder="your@email.com" style="flex:1;padding:9px 13px;border:1px solid var(--border);border-radius:6px;font-size:.9rem">
+      <button class="btn btn-outline" onclick="checkComplaints()">Check</button>
+    </div>
+    <div id="complaintStatusList" style="margin-top:14px"></div>
+  </div>
+
+  <!-- Admin view -->
+  <div id="adminComplaintsSection" style="display:none">
+    <div class="section-header"><h2>All Complaints (Admin)</h2></div>
+    <div id="adminComplaintsList"><div class="spinner"></div></div>
+  </div>
+</main>
+
+<!-- ═══ ADMIN ══════════════════════════════════════════════════════════════ -->
+<main id="page-admin" class="page">
+  <div class="section-header"><h2>⚙️ Admin Panel</h2></div>
+  <div class="admin-tabs">
+    <button class="admin-tab active" onclick="adminTab('applications')">Applications</button>
+    <button class="admin-tab" onclick="adminTab('complaints')">Complaints</button>
+    <button class="admin-tab" onclick="adminTab('users')">Users</button>
+  </div>
+
+  <!-- Applications tab -->
+  <div id="adminTab-applications">
+    <div id="adminAllApps"><div class="spinner"></div></div>
+  </div>
+
+  <!-- Complaints tab -->
+  <div id="adminTab-complaints" style="display:none">
+    <div id="adminAllComplaints"><div class="spinner"></div></div>
+  </div>
+
+  <!-- Users tab -->
+  <div id="adminTab-users" style="display:none">
+    <div class="section-header">
+      <h2>Faculty Members</h2>
+      <button class="btn btn-primary btn-sm" onclick="openProfModal()">+ Add Faculty</button>
+    </div>
+    <div class="card-grid" id="adminProfGrid"><div class="spinner"></div></div>
+  </div>
+</main>
+
+<!-- ═══ Status update modal ════════════════════════════════════════════════ -->
+<div class="modal-backdrop hidden" id="statusModal">
+  <div class="modal" role="dialog" aria-modal="true">
+    <h3 id="statusModalTitle">Update Status</h3>
+    <input type="hidden" id="statusItemType">
+    <input type="hidden" id="statusItemId">
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="statusSelect">Status</label>
+        <select id="statusSelect"></select>
+      </div>
+      <div class="form-group">
+        <label for="statusNotes">Admin Notes</label>
+        <textarea id="statusNotes" placeholder="Optional notes..."></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeStatusModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveStatus()">Update</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "department_guide",
+  "version": "1.0.0",
+  "description": "A real Life project what a deparment need most in life.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/basic.test.js"
+  },
+  "keywords": ["department", "university", "offline", "captive-portal"],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=16"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.9.0",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "multer": "^2.1.1"
+  }
+}
