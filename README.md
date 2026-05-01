@@ -31,6 +31,7 @@ When a device connects to the WiFi, a **captive portal** automatically redirects
 | 📡 **Captive Portal** | Auto-redirects users when connecting to WiFi |
 | 🔘 **Reset Button** | Router reset button restores data (factory reset blocked) |
 | ♾️ **Auto-Start** | Survives router reboots via procd service |
+|Enable-faculty_chat| Now faculty can chat and share files
 
 ---
 
