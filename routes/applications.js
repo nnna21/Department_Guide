@@ -3,8 +3,12 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database/db');
+const { createRateLimiter } = require('./rateLimiter');
 
 const VALID_TYPES = ['leave_request', 'certificate', 'transcript', 'enrollment', 'other'];
+
+const submitLimiter = createRateLimiter({ windowMs: 60_000, max: 10,
+  message: 'Too many submissions, please slow down.' });
 
 // GET applications (admin sees all; others see their own by email query param)
 router.get('/', (req, res) => {
@@ -30,15 +34,17 @@ router.get('/:id', (req, res) => {
 });
 
 // POST submit application (public)
-router.post('/', (req, res) => {
+router.post('/', submitLimiter, (req, res) => {
   const { applicant_name, applicant_email, type, subject, body } = req.body;
   if (!applicant_name || !applicant_email || !type || !subject || !body) {
     return res.status(400).json({ error: 'All fields are required' });
   }
   if (!VALID_TYPES.includes(type)) return res.status(400).json({ error: 'Invalid application type' });
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(applicant_email)) return res.status(400).json({ error: 'Invalid email address' });
+  const emailRegex = /^[^\s@]{1,64}@[^\s@]{1,253}$/;
+  if (!emailRegex.test(applicant_email) || !applicant_email.slice(applicant_email.indexOf('@') + 1).includes('.')) {
+    return res.status(400).json({ error: 'Invalid email address' });
+  }
 
   const result = db.prepare(`
     INSERT INTO applications (applicant_name, applicant_email, type, subject, body)

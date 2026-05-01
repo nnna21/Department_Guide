@@ -3,8 +3,12 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database/db');
+const { createRateLimiter } = require('./rateLimiter');
 
 const VALID_CATEGORIES = ['academic', 'infrastructure', 'staff', 'administration', 'other'];
+
+const submitLimiter = createRateLimiter({ windowMs: 60_000, max: 10,
+  message: 'Too many submissions, please slow down.' });
 
 // GET complaints (admin sees all; public can check by email)
 router.get('/', (req, res) => {
@@ -29,15 +33,17 @@ router.get('/:id', (req, res) => {
 });
 
 // POST submit complaint (public)
-router.post('/', (req, res) => {
+router.post('/', submitLimiter, (req, res) => {
   const { reporter_name, reporter_email, category, subject, description } = req.body;
   if (!reporter_name || !reporter_email || !category || !subject || !description) {
     return res.status(400).json({ error: 'All fields are required' });
   }
   if (!VALID_CATEGORIES.includes(category)) return res.status(400).json({ error: 'Invalid category' });
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(reporter_email)) return res.status(400).json({ error: 'Invalid email address' });
+  const emailRegex = /^[^\s@]{1,64}@[^\s@]{1,253}$/;
+  if (!emailRegex.test(reporter_email) || !reporter_email.slice(reporter_email.indexOf('@') + 1).includes('.')) {
+    return res.status(400).json({ error: 'Invalid email address' });
+  }
 
   const result = db.prepare(`
     INSERT INTO complaints (reporter_name, reporter_email, category, subject, description)
