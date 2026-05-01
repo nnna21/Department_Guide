@@ -4,13 +4,9 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const db = require('../database/db');
-const { createRateLimiter } = require('./rateLimiter');
-
-const loginLimiter = createRateLimiter({ windowMs: 15 * 60_000, max: 20,
-  message: 'Too many login attempts, please try again in 15 minutes.' });
 
 // POST login
-router.post('/login', loginLimiter, (req, res) => {
+router.post('/login', (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'Email and password are required' });
 

@@ -2,6 +2,7 @@
 
 const express = require('express');
 const session = require('express-session');
+const rateLimit = require('express-rate-limit');
 const path = require('path');
 
 const app = express();
@@ -15,8 +16,31 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'dept-guide-secret-change-in-production',
   resave: false,
   saveUninitialized: false,
+  // Note: secure:true requires HTTPS. This app is designed for offline LAN use
+  // where HTTPS is not available. Set secure:true when deployed behind a proxy
+  // that terminates TLS.
   cookie: { httpOnly: true, maxAge: 8 * 60 * 60 * 1000 } // 8 hours
 }));
+
+// ─── Global rate limiter (all /api routes) ────────────────────────────────────
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 500,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests, please try again later.' }
+});
+
+// Stricter limiter for auth and public submission endpoints
+const strictLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests, please try again later.' }
+});
+
+app.use('/api/', apiLimiter);
 
 // ─── Static files ─────────────────────────────────────────────────────────────
 app.use(express.static(path.join(__dirname, 'public')));
@@ -38,13 +62,13 @@ captivePortalPaths.forEach(p => {
 });
 
 // ─── API routes ───────────────────────────────────────────────────────────────
-app.use('/api/auth', require('./routes/auth'));
+app.use('/api/auth', strictLimiter, require('./routes/auth'));
 app.use('/api/notices', require('./routes/notices'));
 app.use('/api/schedule', require('./routes/schedule'));
 app.use('/api/professors', require('./routes/professors'));
 app.use('/api/files', require('./routes/files'));
-app.use('/api/applications', require('./routes/applications'));
-app.use('/api/complaints', require('./routes/complaints'));
+app.use('/api/applications', strictLimiter, require('./routes/applications'));
+app.use('/api/complaints', strictLimiter, require('./routes/complaints'));
 
 // ─── Serve SPA for all other GET requests ─────────────────────────────────────
 app.get('/{*path}', (req, res) => {

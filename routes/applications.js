@@ -3,12 +3,8 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../database/db');
-const { createRateLimiter } = require('./rateLimiter');
 
 const VALID_TYPES = ['leave_request', 'certificate', 'transcript', 'enrollment', 'other'];
-
-const submitLimiter = createRateLimiter({ windowMs: 60_000, max: 10,
-  message: 'Too many submissions, please slow down.' });
 
 // GET applications (admin sees all; others see their own by email query param)
 router.get('/', (req, res) => {
@@ -34,7 +30,7 @@ router.get('/:id', (req, res) => {
 });
 
 // POST submit application (public)
-router.post('/', submitLimiter, (req, res) => {
+router.post('/', (req, res) => {
   const { applicant_name, applicant_email, type, subject, body } = req.body;
   if (!applicant_name || !applicant_email || !type || !subject || !body) {
     return res.status(400).json({ error: 'All fields are required' });
