@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Data Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(160deg, #c2e9fb 0%, #a1d8f0 100%);
+            color: #1a2d3d;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Glass background overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -15%;
+            left: -10%;
+            width: 55%;
+            height: 55%;
+            background: radial-gradient(circle, rgba(200,240,255,0.4) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -10%;
+            right: -10%;
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(circle, rgba(160,220,245,0.3) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2a8ab5, #4bafd6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-link {
+            color: #4a7a95;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 30px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(42, 138, 181, 0.15);
+            color: #2a8ab5;
+        }
+
+        .section-card {
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(75, 175, 214, 0.3);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #2a8ab5;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .timetable-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .timetable-card {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(75, 175, 214, 0.2);
+            border-radius: 16px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .timetable-card:hover {
+            border-color: #2a8ab5;
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .timetable-name {
+            font-weight: 500;
+            color: #1a2d3d;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4bafd6, #2a8ab5);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.6);
+            color: #1a2d3d;
+            border: 1px solid rgba(75, 175, 214, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.25);
+        }
+
+        .btn-primary:hover, .btn-secondary:hover, .btn-danger:hover {
+            transform: translateY(-2px);
+        }
+
+        .flash-message {
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .flash-success {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid #10b981;
+            color: #10b981;
+        }
+
+        .flash-warning {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(75, 175, 214, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2a8ab5;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid rgba(75, 175, 214, 0.3);
+            color: #2a8ab5;
+        }
+
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid rgba(75, 175, 214, 0.15);
+        }
+
+        .badge {
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            margin-left: 10px;
+        }
+
+        .programs-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .program-tag {
+            background: rgba(42, 138, 181, 0.12);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(42, 138, 181, 0.3);
+            transition: all 0.2s;
+        }
+
+        .program-tag:hover {
+            background: rgba(42, 138, 181, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .program-code {
+            color: #2a8ab5;
+            font-weight: 600;
+            margin-left: 8px;
+            font-size: 0.8rem;
+        }
+
+        /* Dark mode support */
+        [data-theme="dark"] body {
+            background: linear-gradient(160deg, #0f2a3a 0%, #1a3a4a 100%);
+            color: #e8f0f5;
+        }
+        [data-theme="dark"] .logo {
+            background: linear-gradient(135deg, #4bafd6, #6bc0e8);
+            -webkit-background-clip: text;
+        }
+        [data-theme="dark"] .section-card {
+            background: rgba(25, 45, 60, 0.55);
+            border-color: rgba(75, 175, 214, 0.25);
+        }
+        [data-theme="dark"] .section-title {
+            color: #4bafd6;
+        }
+        [data-theme="dark"] .timetable-card {
+            background: rgba(25, 45, 60, 0.45);
+            border-color: rgba(75, 175, 214, 0.2);
+        }
+        [data-theme="dark"] .timetable-name {
+            color: #e8f0f5;
+        }
+        [data-theme="dark"] .nav-link {
+            color: #b0d0e0;
+        }
+        [data-theme="dark"] .nav-link:hover, 
+        [data-theme="dark"] .nav-link.active {
+            background: rgba(75, 175, 214, 0.15);
+            color: #4bafd6;
+        }
+        [data-theme="dark"] .btn-secondary {
+            background: rgba(30, 50, 65, 0.5);
+            color: #e8f0f5;
+            border-color: rgba(75, 175, 214, 0.25);
+        }
+        [data-theme="dark"] .btn-secondary:hover {
+            background: rgba(40, 60, 75, 0.7);
+        }
+        [data-theme="dark"] .stat-card {
+            background: rgba(25, 45, 60, 0.45);
+            border-color: rgba(75, 175, 214, 0.2);
+        }
+        [data-theme="dark"] .stat-number {
+            color: #4bafd6;
+        }
+        [data-theme="dark"] th {
+            color: #4bafd6;
+            border-bottom-color: rgba(75, 175, 214, 0.3);
+        }
+        [data-theme="dark"] td {
+            border-bottom-color: rgba(75, 175, 214, 0.15);
+        }
+        [data-theme="dark"] .program-tag {
+            background: rgba(75, 175, 214, 0.12);
+            border-color: rgba(75, 175, 214, 0.3);
+        }
+        [data-theme="dark"] .program-code {
+            color: #4bafd6;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .timetable-card {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            .action-buttons {
+                justify-content: center;
+            }
+            .section-title {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">📊 Admin Data Management</div>
+            <div class="nav-links">
+                <a href="/submissions" class="nav-link">📋 Submissions</a>
+                <a href="/admin/data" class="nav-link active">📁 Data Manager</a>
+                <a href="/" class="nav-link">🏠 Home</a>
+                <a href="/admin/logout" class="nav-link">🚪 Logout</a>
+            </div>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-number">{{ timetable_files|length }}</div>
+                <div>Timetables</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ teachers|length if teachers else 0 }}</div>
+                <div>Teachers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ announcements|length if announcements else 0 }}</div>
+                <div>Announcements</div>
+            </div>
+        </div>
+
+        <!-- Timetables Section -->
+        <div class="section-card">
+            <div class="section-title">
+                <span>📅</span> Timetables
+                <a href="/admin/create_timetable" class="btn btn-primary" style="margin-left: auto;">+ Create New</a>
+            </div>
+            <div class="timetable-grid">
+                {% for file in timetable_files %}
+                <div class="timetable-card">
+                    <span class="timetable-name">{{ file }}</span>
+                    <div class="action-buttons">
+                        <a href="/admin/edit_timetable/{{ file }}" class="btn btn-secondary">✏️ Edit</a>
+                        <a href="/admin/delete_timetable/{{ file }}" class="btn btn-danger" onclick="return confirm('Delete {{ file }}? This cannot be undone!')">🗑️ Delete</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Teachers Section -->
+        <div class="section-card">
+            <div class="section-title">
+                <span>👥</span> Teachers Directory
+                <a href="/admin/edit_teachers" class="btn btn-primary" style="margin-left: auto;">✏️ Edit All</a>
+            </div>
+            <div style="max-height: 300px; overflow-y: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Subject</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for teacher in teachers %}
+                        <tr>
+                            <td>{{ teacher.name }}</td>
+                            <td>{{ teacher.subject }}</td>
+                            <td>{{ teacher.type }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Programs Section -->
+        <div class="section-card">
+            <div class="section-title">
+                <span>🎓</span> Programs / Sessions
+                <a href="/admin/create_timetable" class="btn btn-primary" style="margin-left: auto;">+ Add New</a>
+            </div>
+            <div class="programs-container">
+                {% for code, name in programs.items() %}
+                <div class="program-tag">
+                    {{ name }}
+                    <span class="program-code">({{ code }})</span>
+                </div>
+                {% endfor %}
+            </div>
+            <div style="margin-top: 15px; font-size: 0.8rem; color: #4a7a95;">
+                💡 New programs appear automatically in the main guide dropdown
+            </div>
+        </div>
+
+        <!-- Announcements Section -->
+        <div class="section-card">
+            <div class="section-title">
+                <span>📢</span> Announcements
+                <a href="/admin/edit_announcements" class="btn btn-primary" style="margin-left: auto;">✏️ Edit All</a>
+            </div>
+            {% for announcement in announcements %}
+            <div style="padding: 12px 0; border-bottom: 1px solid rgba(75, 175, 214, 0.15);">
+                <strong>{{ announcement.title }}</strong><br>
+                <span style="color: #4a7a95; font-size: 0.9rem;">{{ announcement.description }}</span>
+                <span class="badge" style="background: {% if announcement.badge_type == 'urgent' %}#ef4444{% elif announcement.badge_type == 'success' %}#10b981{% else %}#2a8ab5{% endif %};">{{ announcement.badge }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Backup Section -->
+        <div class="section-card">
+            <div class="section-title">
+                <span>💾</span> Backup & Recovery
+            </div>
+            <a href="/admin/backup" class="btn btn-primary">Create Backup</a>
+            <span style="color: #4a7a95; margin-left: 15px; font-size: 0.85rem;">Backups are saved in data/backup_* folders</span>
+        </div>
+    </div>
+</body>
+</html>

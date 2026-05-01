@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Department Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(160deg, #c2e9fb 0%, #a1d8f0 100%);
+            color: #1a2d3d;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Glass background overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -15%;
+            left: -10%;
+            width: 55%;
+            height: 55%;
+            background: radial-gradient(circle, rgba(200,240,255,0.4) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -10%;
+            right: -10%;
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(circle, rgba(160,220,245,0.3) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .login-container {
+            max-width: 400px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(12px);
+            border-radius: 40px;
+            padding: 40px;
+            border: 1px solid rgba(75, 175, 214, 0.3);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #2a8ab5, #4bafd6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #2a8ab5, #4bafd6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #4a7a95;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .alert {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .alert.success {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: #10b981;
+            color: #10b981;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a7a95;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(75, 175, 214, 0.3);
+            border-radius: 15px;
+            color: #1a2d3d;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #2a8ab5;
+            box-shadow: 0 0 20px rgba(42, 138, 181, 0.2);
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #4bafd6, #2a8ab5);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(42, 138, 181, 0.4);
+        }
+
+        .info-box {
+            background: rgba(42, 138, 181, 0.1);
+            border-left: 4px solid #2a8ab5;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: #4a7a95;
+        }
+
+        .info-box strong {
+            color: #2a8ab5;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #4a7a95;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .back-link a:hover {
+            color: #2a8ab5;
+        }
+
+        .setup-message {
+            background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(42,138,181,0.1));
+            border: 1px solid #10b981;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .setup-message .icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .setup-message h3 {
+            color: #10b981;
+            margin-bottom: 5px;
+        }
+
+        .setup-message p {
+            color: #4a7a95;
+            font-size: 0.9rem;
+        }
+
+        /* Dark mode support */
+        [data-theme="dark"] body {
+            background: linear-gradient(160deg, #0f2a3a 0%, #1a3a4a 100%);
+            color: #e8f0f5;
+        }
+        [data-theme="dark"] .login-card {
+            background: rgba(25, 45, 60, 0.55);
+            border-color: rgba(75, 175, 214, 0.25);
+        }
+        [data-theme="dark"] .logo,
+        [data-theme="dark"] .title {
+            background: linear-gradient(135deg, #4bafd6, #6bc0e8);
+            -webkit-background-clip: text;
+        }
+        [data-theme="dark"] .subtitle {
+            color: #b0d0e0;
+        }
+        [data-theme="dark"] label {
+            color: #b0d0e0;
+        }
+        [data-theme="dark"] input {
+            background: rgba(40, 65, 85, 0.7);
+            color: #e8f0f5;
+            border-color: rgba(75, 175, 214, 0.25);
+        }
+        [data-theme="dark"] input:focus {
+            background: rgba(50, 75, 95, 0.85);
+            border-color: #4bafd6;
+        }
+        [data-theme="dark"] .info-box {
+            background: rgba(75, 175, 214, 0.1);
+            color: #b0d0e0;
+            border-left-color: #4bafd6;
+        }
+        [data-theme="dark"] .info-box strong {
+            color: #4bafd6;
+        }
+        [data-theme="dark"] .back-link a {
+            color: #b0d0e0;
+        }
+        [data-theme="dark"] .back-link a:hover {
+            color: #4bafd6;
+        }
+        [data-theme="dark"] .setup-message p {
+            color: #b0d0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo">Department Portal</div>
+            <div class="title">Admin Access</div>
+            
+            {% if is_first_time %}
+            <div class="setup-message">
+                <div class="icon">🔐</div>
+                <h3>First Time Setup</h3>
+                <p>Create an admin password to secure the submissions page</p>
+            </div>
+            {% else %}
+            <div class="subtitle">Enter password to view submissions</div>
+            {% endif %}
+
+            {% if error %}
+            <div class="alert">{{ error }}</div>
+            {% endif %}
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert {% if category == 'success' %}success{% endif %}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST">
+                <div class="form-group">
+                    <label>
+                        {% if is_first_time %}
+                        Create Password
+                        {% else %}
+                        Password
+                        {% endif %}
+                    </label>
+                    <input type="password" name="password" required 
+                           placeholder="{% if is_first_time %}Enter new password{% else %}Enter password{% endif %}"
+                           minlength="4">
+                </div>
+
+                {% if is_first_time %}
+                <div class="info-box">
+                    <strong>ℹ️ Password Requirements:</strong>
+                    • Minimum 4 characters<br>
+                    • Choose a strong password<br>
+                    • Save it somewhere safe
+                </div>
+                {% endif %}
+
+                <button type="submit" class="btn">
+                    {% if is_first_time %}
+                    Set Password & Login
+                    {% else %}
+                    Login
+                    {% endif %}
+                </button>
+            </form>
+
+            <div class="back-link">
+                <a href="/">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Department Guide – Information Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ── NEW BLUE GRADIENT GLASS THEME ── */
+    :root {
+      --bg-start: #c2e9fb;
+      --bg-end: #a1d8f0;
+      --surface: rgba(255, 255, 255, 0.55);
+      --surface2: rgba(255, 255, 255, 0.45);
+      --surface3: rgba(220, 240, 250, 0.65);
+      --border: rgba(75, 175, 214, 0.3);
+      --text: #1a2d3d;
+      --text-muted: #4a7a95;
+      --accent: #2a8ab5;
+      --accent2: #4bafd6;
+      --accent3: #1a6a95;
+      --glow-a: rgba(75, 175, 214, 0.15);
+      --r-card: 24px;
+      --r-pill: 999px;
+      --shadow-sm: 0 2px 8px rgba(100,180,220,0.1);
+      --shadow-md: 0 8px 24px rgba(100,180,220,0.12);
+      --transition: 0.2s ease;
+    }
+    [data-theme="dark"] {
+      --bg-start: #0f2a3a;
+      --bg-end: #1a3a4a;
+      --surface: rgba(25, 45, 60, 0.55);
+      --surface2: rgba(30, 50, 65, 0.45);
+      --surface3: rgba(40, 60, 75, 0.65);
+      --border: rgba(75, 175, 214, 0.25);
+      --text: #e8f0f5;
+      --text-muted: #b0d0e0;
+      --accent: #4bafd6;
+      --accent2: #6bc0e8;
+      --accent3: #2a8ab5;
+      --glow-a: rgba(75, 175, 214, 0.12);
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+      --shadow-md: 0 8px 24px rgba(0,0,0,0.25);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(160deg, var(--bg-start) 0%, var(--bg-end) 100%);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background var(--transition), color var(--transition);
+      line-height: 1.5;
+    }
+
+    /* Glass background overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -15%;
+      left: -10%;
+      width: 55%;
+      height: 55%;
+      background: radial-gradient(circle, rgba(200,240,255,0.4) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -10%;
+      right: -10%;
+      width: 50%;
+      height: 50%;
+      background: radial-gradient(circle, rgba(160,220,245,0.3) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      transition: all var(--transition);
+    }
+    [data-theme="dark"] header {
+      background: rgba(20, 40, 55, 0.55);
+    }
+    header.scrolled { box-shadow: var(--shadow-md); }
+
+    .header-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 1.3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .header-spacer { flex: 1; }
+
+    .home-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.5rem 1.1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--r-pill);
+      background: rgba(255,255,255,0.5);
+      color: var(--text);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .home-btn:hover { background: var(--glow-a); border-color: var(--accent); }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+    }
+
+    .ctrl-select {
+      padding: 0.5rem 2rem 0.5rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--r-pill);
+      background: rgba(255,255,255,0.7);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232a8ab5' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 14px;
+    }
+    .ctrl-select:focus { outline: none; border-color: var(--accent); }
+    .ctrl-select option { background: white; }
+
+    .apply-btn {
+      padding: 0.5rem 1.3rem;
+      border-radius: var(--r-pill);
+      border: none;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+    .apply-btn:hover { opacity: 0.85; }
+
+    .current-badge {
+      padding: 0.4rem 1rem;
+      border: 1px solid var(--accent);
+      border-radius: var(--r-pill);
+      font-size: 0.75rem;
+      color: var(--accent);
+      white-space: nowrap;
+      background: var(--glow-a);
+      font-weight: 500;
+    }
+
+    .datetime-badge {
+      display: flex;
+      gap: 0.7rem;
+      padding: 0.5rem 1.2rem;
+      border-radius: var(--r-pill);
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 500;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .theme-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.6);
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .theme-btn:hover { background: var(--glow-a); border-color: var(--accent); }
+
+    /* ── HERO ── */
+    #hero {
+      padding: 120px 1.5rem 50px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      padding: 0.3rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: var(--r-pill);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      background: rgba(255,255,255,0.4);
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 6vw, 4rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--text), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      color: var(--text-muted);
+      max-width: 550px;
+      margin: 0 auto;
+    }
+
+    /* ── PAGE BODY ── */
+    .page-body {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 1.5rem 3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── VIEW TOGGLE ── */
+    .view-toggle {
+      display: inline-flex;
+      gap: 0.5rem;
+      padding: 0.3rem;
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: var(--r-pill);
+      margin-bottom: 1.5rem;
+    }
+
+    .view-btn {
+      padding: 0.45rem 1.2rem;
+      border: none;
+      border-radius: var(--r-pill);
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .view-btn.active {
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: white;
+    }
+
+    /* ── SEARCH & FILTERS ── */
+    .filters-section {
+      margin-bottom: 1.8rem;
+    }
+
+    .search-wrapper {
+      position: relative;
+      max-width: 450px;
+      margin-bottom: 1rem;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.7rem 1rem 0.7rem 2.6rem;
+      border: 1px solid var(--border);
+      border-radius: var(--r-pill);
+      background: rgba(255,255,255,0.7);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+    }
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .filter-chips {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      padding: 0.4rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: var(--r-pill);
+      background: rgba(255,255,255,0.5);
+      color: var(--text);
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .chip:hover { background: var(--surface2); border-color: var(--accent); }
+    .chip.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 700px) { .stats-row { grid-template-columns: 1fr; } }
+
+    .stat-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      padding: 1.2rem;
+    }
+    .stat-card:hover { border-color: var(--accent); }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .stat-label {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.2rem;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .stat-value.sm { font-size: 0.9rem; -webkit-text-fill-color: var(--text); background: none; }
+    .stat-sub { font-size: 0.65rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+    /* ── CARD ── */
+    .card {
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      padding: 1.2rem;
+      transition: all 0.2s;
+    }
+    .card:hover { border-color: var(--accent); background: rgba(255,255,255,0.65); }
+
+    .sec-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .sec-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .pill {
+      padding: 0.25rem 0.8rem;
+      border-radius: var(--r-pill);
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    /* ── MAIN GRID ── */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 960px) { .main-grid { grid-template-columns: 1fr; } }
+
+    /* ── TIMETABLE ── */
+    .tt-wrap { overflow-x: auto; }
+    .timetable { width: 100%; border-collapse: collapse; min-width: 500px; font-size: 0.85rem; }
+    .timetable thead tr { background: linear-gradient(135deg, var(--accent2), var(--accent)); }
+    .timetable th {
+      color: white;
+      padding: 0.7rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+    .timetable th:first-child { border-radius: 10px 0 0 10px; }
+    .timetable th:last-child { border-radius: 0 10px 10px 0; }
+    .timetable td {
+      padding: 0.8rem 0.7rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .timetable tr:last-child td { border-bottom: none; }
+    .timetable tbody tr:hover td { background: var(--glow-a); }
+    .current-class td { background: var(--glow-a); border-left: 3px solid var(--accent); }
+    .room-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0.2rem 0.6rem;
+      background: rgba(255,255,255,0.5);
+      border-radius: var(--r-pill);
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--accent);
+    }
+
+    /* ── WEEK VIEW ── */
+    .week-view { display: none; }
+    .week-view.active { display: block; }
+    .week-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+    .day-card {
+      background: rgba(255,255,255,0.45);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      padding: 0.8rem;
+    }
+    .day-card.today { border-color: var(--accent); background: var(--glow-a); }
+    .day-header { font-weight: 700; margin-bottom: 0.6rem; color: var(--accent); }
+    .class-item {
+      padding: 0.5rem;
+      background: rgba(255,255,255,0.35);
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      border-left: 2px solid var(--accent);
+    }
+    .class-time { font-size: 0.65rem; color: var(--text-muted); }
+    .class-subject { font-weight: 600; font-size: 0.8rem; }
+    .class-details { font-size: 0.65rem; color: var(--text-muted); }
+
+    /* ── TEACHER LIST ── */
+    .teacher-list { display: flex; flex-direction: column; gap: 0.7rem; }
+    .teacher-card {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.8rem;
+      background: rgba(255,255,255,0.45);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    .teacher-card:hover { border-color: var(--accent); background: rgba(255,255,255,0.6); }
+    .t-avatar {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+    .t-name { font-size: 0.9rem; font-weight: 600; }
+    .t-subject { font-size: 0.7rem; color: var(--accent); margin: 0.2rem 0; }
+    .t-details { display: flex; flex-direction: column; gap: 0.1rem; font-size: 0.65rem; color: var(--text-muted); }
+
+    /* ── BOTTOM GRID ── */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 700px) { .bottom-grid { grid-template-columns: 1fr; } }
+
+    .announce-item {
+      display: flex;
+      gap: 0.7rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .badge {
+      flex-shrink: 0;
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--r-pill);
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #f43f5e, #e11d48);
+      color: white;
+    }
+    .badge.info { background: linear-gradient(135deg, var(--accent2), var(--accent)); }
+    .badge.success { background: linear-gradient(135deg, #10b981, #059669); }
+    .badge.urgent { background: linear-gradient(135deg, #f97316, #ea580c); }
+    .announce-title { font-size: 0.8rem; font-weight: 600; }
+    .announce-desc { font-size: 0.7rem; color: var(--text-muted); }
+
+    .location-list { list-style: none; }
+    .location-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8rem;
+    }
+    .loc-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .empty { text-align: center; padding: 2rem; color: var(--text-muted); font-style: italic; }
+
+    .footer {
+      text-align: center;
+      padding: 1.5rem 0 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      border-top: 1px solid var(--border);
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 640px) {
+      .header-inner { padding: 0.6rem 1rem; }
+      .logo { font-size: 1rem; }
+      .ctrl-select, .apply-btn { font-size: 0.7rem; padding: 0.35rem 1rem; }
+      .datetime-badge { font-size: 0.65rem; padding: 0.35rem 0.8rem; }
+      #hero { padding: 100px 1rem 30px; }
+      .stat-value { font-size: 1.2rem; }
+      .card { padding: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header id="header">
+    <div class="header-inner">
+      <div class="logo">📚 Dept Guide</div>
+      <a href="/" class="home-btn">🏠 Home</a>
+      <div class="header-spacer"></div>
+
+      <div class="header-controls">
+        <select id="programSelect" class="ctrl-select">
+    {% for code, name in programs.items() %}
+    <option value="{{ code }}" {% if program == name %}selected{% endif %}>
+        {% if code == 'cyber' %}🔐
+        {% elif code == 'ce' %}💻
+        {% elif code == 'ist' %}🛡️
+        {% else %}📚{% endif %} {{ name }}
+    </option>
+    {% endfor %}
+</select>
+
+        <select id="sectionSelect" class="ctrl-select">
+          <option value="A" {% if section == 'A' %}selected{% endif %}>Section A</option>
+          <option value="B" {% if section == 'B' %}selected{% endif %}>Section B</option>
+        </select>
+
+        <button class="apply-btn" onclick="changeProgramSection()">Apply</button>
+
+        {% if program and section %}
+        <span class="current-badge">{{ program }} · {{ section }}</span>
+        {% endif %}
+      </div>
+
+      <div class="datetime-badge">
+        <span id="clientDate">—</span>
+        <span id="clientTime">—</span>
+      </div>
+
+      <button id="themeToggle" class="theme-btn">☀️</button>
+    </div>
+  </header>
+
+  <section id="hero">
+    <div class="hero-eyebrow">Academic Information Hub</div>
+    <h1 class="hero-title">
+      {% if program and section %}
+        {{ program }}<br>Section {{ section }}
+      {% else %}
+        Department Guide
+      {% endif %}
+    </h1>
+    <p class="hero-subtitle">
+      {% if program and section %}
+        Live timetable & resources for {{ program }} – Section {{ section }}
+      {% else %}
+        Your complete department companion — timetables, faculty, announcements.
+      {% endif %}
+    </p>
+  </section>
+
+  <div class="page-body">
+
+    <div class="view-toggle">
+      <button class="view-btn active" data-view="today">Today</button>
+      <button class="view-btn" data-view="week">Week View</button>
+    </div>
+
+    <div class="filters-section">
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="teacherSearch" placeholder="Search faculty by name or subject...">
+      </div>
+      <div class="filter-chips">
+        <div class="chip active" data-type="all">All Faculty</div>
+        <div class="chip" data-type="Professor">Professor</div>
+        <div class="chip" data-type="Teacher">Teacher</div>
+        <div class="chip" data-type="Lecturer">Lecturer</div>
+        <div class="chip" data-type="Faculty Member">Faculty Member</div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div>
+          <div class="stat-label">Today's Classes</div>
+          <div class="stat-value" id="todayCount">0</div>
+          <div class="stat-sub">scheduled for today</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div>
+          <div class="stat-label">Faculty</div>
+          <div class="stat-value">{{ teachers|length if teachers else 0 }}</div>
+          <div class="stat-sub">teachers available</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">⏳</div>
+        <div>
+          <div class="stat-label">Next Class</div>
+          <div class="stat-value sm" id="nextClassLabel">—</div>
+          <div class="stat-sub" id="nextClassSub">upcoming</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-grid">
+      <div class="card" id="todayView">
+        <div class="sec-header">
+          <span class="sec-title">📋 Today's Timetable</span>
+          <span class="pill" id="todayPill">—</span>
+        </div>
+        <div id="todayTimetableBody" class="tt-wrap">
+          <div class="empty">✨ Loading timetable...</div>
+        </div>
+      </div>
+
+      <div class="card week-view" id="weekView">
+        <div class="sec-header">
+          <span class="sec-title">📅 Weekly Schedule</span>
+        </div>
+        <div id="weekTimetableBody">
+          <div class="empty">Loading...</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sec-header">
+          <span class="sec-title">👩‍🏫 Faculty Directory</span>
+          <span class="pill">{{ teachers|length if teachers else 0 }}</span>
+        </div>
+        <div class="teacher-list" id="teacherList">
+          {% if teachers %}
+            {% for teacher in teachers %}
+              <div class="teacher-card" data-name="{{ teacher.name|lower }}" data-subject="{{ teacher.subject|lower }}" data-type="{{ teacher.type }}">
+                <div class="t-avatar">{{ teacher.name[:1] }}</div>
+                <div>
+                  <div class="t-name">{{ teacher.name }}</div>
+                  <div class="t-subject">{{ teacher.subject }}</div>
+                  <div class="t-details">
+                    <span>📧 {{ teacher.email }}</span>
+                    <span>📞 {{ teacher.phone }}</span>
+                    <span>🏫 Room {{ teacher.room }}</span>
+                    <span>👤 {{ teacher.type }}</span>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty">No faculty data available.</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-grid">
+      <div class="card">
+        <div class="sec-header"><span class="sec-title">📢 Announcements</span></div>
+        {% if announcements and announcements.announcements %}
+          {% for item in announcements.announcements %}
+            <div class="announce-item">
+              <span class="badge {% if item.badge_type %}{{ item.badge_type }}{% endif %}">{{ item.badge }}</span>
+              <div>
+                <div class="announce-title">{{ item.title }}</div>
+                <div class="announce-desc">{{ item.description }}</div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="empty">No announcements right now.</div>
+        {% endif %}
+      </div>
+
+      <div class="card">
+        <div class="sec-header"><span class="sec-title">📍 Key Locations</span></div>
+        <ul class="location-list">
+          <li><span class="loc-icon">📚</span> Library — Ground Floor, next to Faculty Office</li>
+          <li><span class="loc-icon">🧑‍🏫</span> Faculty Office — Ground Floor, right side from entrance</li>
+          <li><span class="loc-icon">🏛️</span> Chairman Office — Ground Floor, first room on right</li>
+          <li><span class="loc-icon">💻</span> Computer Lab — 1st Floor, Room 006</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">
+      © 2026 Department Guide – Local Network Information Hub<br>
+      Data updates every minute · Last updated: <span id="lastUpdate">just now</span>
+    </div>
+  </div>
+
+  <script>
+    const timetableData = {{ timetable | tojson | safe }};
+    
+    function getClientDateTime() {
+      const now = new Date();
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return {
+        dayName: days[now.getDay()],
+        timeStr: now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
+        dateStr: `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`
+      };
+    }
+
+    function updateDateTimeDisplay() {
+      const { dateStr, timeStr } = getClientDateTime();
+      document.getElementById('clientDate').textContent = dateStr;
+      document.getElementById('clientTime').textContent = timeStr;
+    }
+
+    function renderToday() {
+      const { dayName, timeStr } = getClientDateTime();
+      document.getElementById('todayPill').textContent = dayName;
+
+      let classesToday = [];
+      if (timetableData && timetableData.schedule && timetableData.schedule[dayName]) {
+        classesToday = timetableData.schedule[dayName].classes || [];
+      }
+      document.getElementById('todayCount').textContent = classesToday.length;
+
+      const container = document.getElementById('todayTimetableBody');
+      if (classesToday.length === 0) {
+        container.innerHTML = '<div class="empty">✨ No classes today — enjoy the break!</div>';
+        return;
+      }
+
+      let html = '<table class="timetable"><thead><tr><th>Time</th><th>Subject</th><th>Teacher</th><th>Room</th></tr></thead><tbody>';
+      classesToday.forEach(cls => {
+        const isCurrent = (cls.time_start <= timeStr && cls.time_end >= timeStr);
+        const rowClass = isCurrent ? 'class="current-class"' : '';
+        html += `<tr ${rowClass}>
+          <td>${cls.time_start}–${cls.time_end}</td>
+          <td><strong>${cls.subject}</strong></td>
+          <td>${cls.teacher}</td>
+          <td><span class="room-tag">🏫 ${cls.room}</span></td>
+        </tr>`;
+      });
+      html += '</tbody></table>';
+      container.innerHTML = html;
+
+      let upcoming = classesToday.filter(c => c.time_end > timeStr);
+      let nextText = '—', nextSub = 'no classes';
+      if (upcoming.length > 0) {
+        upcoming.sort((a,b) => a.time_start.localeCompare(b.time_start));
+        nextText = `${upcoming[0].subject} · ${upcoming[0].time_start}`;
+        nextSub = 'Upcoming';
+      } else {
+        const daysOrder = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+        let currentIdx = daysOrder.indexOf(dayName);
+        for (let offset = 1; offset <= 7; offset++) {
+          let nextIdx = (currentIdx + offset) % 7;
+          let nextDay = daysOrder[nextIdx];
+          if (timetableData.schedule && timetableData.schedule[nextDay] && timetableData.schedule[nextDay].classes && timetableData.schedule[nextDay].classes.length > 0) {
+            const firstClass = timetableData.schedule[nextDay].classes[0];
+            nextText = `${nextDay}: ${firstClass.subject} · ${firstClass.time_start}`;
+            nextSub = 'Next Day';
+            break;
+          }
+        }
+      }
+      document.getElementById('nextClassLabel').textContent = nextText;
+      document.getElementById('nextClassSub').textContent = nextSub;
+    }
+
+    function renderWeek() {
+      const container = document.getElementById('weekTimetableBody');
+      if (!timetableData.schedule) {
+        container.innerHTML = '<div class="empty">No schedule data available.</div>';
+        return;
+      }
+      const daysOrder = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+      const currentDay = getClientDateTime().dayName;
+      let html = '<div class="week-grid">';
+      daysOrder.forEach(day => {
+        const dayData = timetableData.schedule[day];
+        const todayClass = (day === currentDay) ? 'today' : '';
+        if (dayData && dayData.classes && dayData.classes.length > 0) {
+          html += `<div class="day-card ${todayClass}"><div class="day-header">${day}</div>`;
+          dayData.classes.forEach(cls => {
+            html += `<div class="class-item">
+              <div class="class-time">${cls.time_start} – ${cls.time_end}</div>
+              <div class="class-subject">${cls.subject}</div>
+              <div class="class-details">${cls.teacher} • Room ${cls.room}</div>
+            </div>`;
+          });
+          html += `</div>`;
+        } else {
+          html += `<div class="day-card ${todayClass}"><div class="day-header">${day}</div><div class="empty">No classes</div></div>`;
+        }
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    function refreshAll() {
+      updateDateTimeDisplay();
+      renderToday();
+      renderWeek();
+      document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+    }
+
+    function initViewToggle() {
+      const btns = document.querySelectorAll('.view-btn');
+      const todayDiv = document.getElementById('todayView');
+      const weekDiv = document.getElementById('weekView');
+      btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          btns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          if (btn.dataset.view === 'today') {
+            todayDiv.style.display = 'block';
+            weekDiv.classList.remove('active');
+          } else {
+            todayDiv.style.display = 'none';
+            weekDiv.classList.add('active');
+          }
+        });
+      });
+    }
+
+    // Theme toggle
+    const themeBtn = document.getElementById('themeToggle');
+    themeBtn.addEventListener('click', () => {
+      const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+
+    // Sticky header
+    window.addEventListener('scroll', () => {
+      document.getElementById('header').classList.toggle('scrolled', window.scrollY > 80);
+    });
+
+    function changeProgramSection() {
+      const program = document.getElementById('programSelect').value;
+      const section = document.getElementById('sectionSelect').value;
+      window.location.href = `/timetable?program=${program}&section=${section}`;
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('program')) document.getElementById('programSelect').value = urlParams.get('program');
+    if (urlParams.get('section')) document.getElementById('sectionSelect').value = urlParams.get('section');
+
+    // Teacher search
+    const searchInput = document.getElementById('teacherSearch');
+    const teacherCards = document.querySelectorAll('.teacher-card');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        teacherCards.forEach(card => {
+          const name = card.dataset.name || '';
+          const subject = card.dataset.subject || '';
+          card.style.display = (name.includes(query) || subject.includes(query)) ? 'flex' : 'none';
+        });
+      });
+    }
+
+    // Filter chips
+    const chips = document.querySelectorAll('.chip');
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        const type = chip.dataset.type;
+        teacherCards.forEach(card => {
+          card.style.display = (type === 'all' || card.dataset.type === type) ? 'flex' : 'none';
+        });
+      });
+    });
+
+    refreshAll();
+    initViewToggle();
+    setInterval(refreshAll, 60000);
+  </script>
+</body>
+</html>

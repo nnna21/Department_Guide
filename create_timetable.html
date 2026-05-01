@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Timetable</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(160deg, #c2e9fb 0%, #a1d8f0 100%);
+            color: #1a2d3d;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: -15%;
+            left: -10%;
+            width: 55%;
+            height: 55%;
+            background: radial-gradient(circle, rgba(200,240,255,0.4) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -10%;
+            right: -10%;
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(circle, rgba(160,220,245,0.3) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            position: relative;
+            z-index: 1;
+        }
+        .card { 
+            background: rgba(255, 255, 255, 0.55); 
+            backdrop-filter: blur(12px);
+            border-radius: 24px; 
+            padding: 30px; 
+            margin-top: 50px; 
+            border: 1px solid rgba(75, 175, 214, 0.3); 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+        .title { 
+            font-size: 1.8rem; 
+            margin-bottom: 20px; 
+            color: #2a8ab5; 
+            text-align: center; 
+            font-weight: 700;
+        }
+        .subtitle {
+            text-align: center;
+            color: #4a7a95;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+        .form-group { 
+            margin-bottom: 20px; 
+        }
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            color: #4a7a95; 
+            font-weight: 500;
+        }
+        select, input { 
+            width: 100%; 
+            padding: 12px; 
+            background: rgba(255, 255, 255, 0.7); 
+            border: 1px solid rgba(75, 175, 214, 0.3); 
+            border-radius: 12px; 
+            color: #1a2d3d; 
+            font-family: 'Inter', sans-serif;
+        }
+        select:focus, input:focus { 
+            outline: none; 
+            border-color: #2a8ab5; 
+            background: rgba(255, 255, 255, 0.9);
+        }
+        select option {
+            background: white;
+            color: #1a2d3d;
+        }
+        .program-type {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .program-type label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.5);
+            transition: all 0.3s;
+        }
+        .program-type label.active {
+            background: rgba(42,138,181,0.2);
+            border: 1px solid #2a8ab5;
+        }
+        .program-type input {
+            width: auto;
+            margin: 0;
+        }
+        .new-program-input {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 16px;
+            display: none;
+        }
+        .new-program-input.active {
+            display: block;
+        }
+        .btn { 
+            width: 100%; 
+            padding: 14px; 
+            background: linear-gradient(135deg, #4bafd6, #2a8ab5); 
+            color: white; 
+            border: none; 
+            border-radius: 30px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            margin-top: 10px; 
+            transition: all 0.3s;
+        }
+        .btn:hover { 
+            opacity: 0.9; 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(42, 138, 181, 0.3);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.6);
+            color: #1a2d3d;
+            margin-top: 0;
+        }
+        .back-link { 
+            display: block; 
+            text-align: center; 
+            margin-top: 20px; 
+            color: #4a7a95; 
+            text-decoration: none; 
+            transition: color 0.3s;
+        }
+        .back-link:hover {
+            color: #2a8ab5;
+        }
+        .info-note {
+            background: rgba(42,138,181,0.1);
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #4a7a95;
+            text-align: center;
+        }
+        
+        /* Dark mode support */
+        [data-theme="dark"] body {
+            background: linear-gradient(160deg, #0f2a3a 0%, #1a3a4a 100%);
+            color: #e8f0f5;
+        }
+        [data-theme="dark"] .card {
+            background: rgba(25, 45, 60, 0.55);
+            border-color: rgba(75, 175, 214, 0.25);
+        }
+        [data-theme="dark"] .title {
+            color: #4bafd6;
+        }
+        [data-theme="dark"] .subtitle {
+            color: #b0d0e0;
+        }
+        [data-theme="dark"] label {
+            color: #b0d0e0;
+        }
+        [data-theme="dark"] select,
+        [data-theme="dark"] input {
+            background: rgba(40, 65, 85, 0.7);
+            color: #e8f0f5;
+            border-color: rgba(75, 175, 214, 0.25);
+        }
+        [data-theme="dark"] select:focus,
+        [data-theme="dark"] input:focus {
+            background: rgba(50, 75, 95, 0.85);
+            border-color: #4bafd6;
+        }
+        [data-theme="dark"] select option {
+            background: #1a3a4a;
+            color: #e8f0f5;
+        }
+        [data-theme="dark"] .program-type label {
+            background: rgba(30, 50, 65, 0.5);
+        }
+        [data-theme="dark"] .program-type label.active {
+            background: rgba(75, 175, 214, 0.2);
+            border-color: #4bafd6;
+        }
+        [data-theme="dark"] .new-program-input {
+            background: rgba(30, 50, 65, 0.3);
+        }
+        [data-theme="dark"] .back-link {
+            color: #b0d0e0;
+        }
+        [data-theme="dark"] .back-link:hover {
+            color: #4bafd6;
+        }
+        [data-theme="dark"] .info-note {
+            background: rgba(75, 175, 214, 0.1);
+            color: #b0d0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="title">📅 Create New Timetable</div>
+            <div class="subtitle">Add a new session or section to the system</div>
+            
+            <form method="POST">
+                <!-- Program Selection -->
+                <div class="form-group">
+                    <label>Program / Session</label>
+                    <div class="program-type" id="programType">
+                        <label class="active">
+                            <input type="radio" name="program_option" value="existing" checked> Select Existing
+                        </label>
+                        <label>
+                            <input type="radio" name="program_option" value="new"> Create New Session
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Existing Program Dropdown -->
+                <div class="form-group" id="existingProgramDiv">
+                    <label>Select Program</label>
+                    <select name="program" id="programSelect">
+                        <option value="">Select Program</option>
+                        <option value="cyber">Cyber Security</option>
+                        <option value="ce">Computer Engineering</option>
+                        <option value="ist">Information Security Technology</option>
+                    </select>
+                </div>
+
+                <!-- New Program Input (hidden by default) -->
+                <div id="newProgramDiv" style="display: none;">
+                    <div class="form-group">
+                        <label>New Session Name</label>
+                        <input type="text" name="new_program" id="newProgram" placeholder="e.g., Artificial Intelligence, Data Science">
+                    </div>
+                    <div class="form-group">
+                        <label>Session Code (for filename)</label>
+                        <input type="text" name="new_program_code" id="newProgramCode" placeholder="e.g., ai, ds, cs">
+                        <small style="color: #4a7a95; font-size: 0.7rem;">Use lowercase letters, no spaces</small>
+                    </div>
+                </div>
+
+                <!-- Section Selection -->
+                <div class="form-group">
+                    <label>Section</label>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <div class="program-type" id="sectionType">
+                            <label class="active">
+                                <input type="radio" name="section_option" value="existing" checked> Select Existing
+                            </label>
+                            <label>
+                                <input type="radio" name="section_option" value="new"> Add New Section
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Existing Section Dropdown -->
+                <div class="form-group" id="existingSectionDiv">
+                    <label>Select Section</label>
+                    <select name="section" id="sectionSelect">
+                        <option value="">Select Section</option>
+                        <option value="A">Section A</option>
+                        <option value="B">Section B</option>
+                    </select>
+                </div>
+
+                <!-- New Section Input (hidden by default) -->
+                <div id="newSectionDiv" style="display: none;">
+                    <div class="form-group">
+                        <label>New Section Letter</label>
+                        <input type="text" name="new_section" id="newSection" maxlength="1" placeholder="e.g., C, D, E" style="text-transform: uppercase;">
+                        <small style="color: #4a7a95; font-size: 0.7rem;">Single letter (A-Z)</small>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">+ Create Timetable</button>
+            </form>
+            <div class="info-note">
+                💡 <strong>Note:</strong> New sessions will automatically appear in the main guide dropdown. 
+                You can edit the timetable after creation to add classes.
+            </div>
+            <a href="/admin/data" class="back-link">← Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        // Toggle between existing and new program
+        const programRadios = document.querySelectorAll('input[name="program_option"]');
+        const existingProgramDiv = document.getElementById('existingProgramDiv');
+        const newProgramDiv = document.getElementById('newProgramDiv');
+        
+        programRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === 'existing') {
+                    existingProgramDiv.style.display = 'block';
+                    newProgramDiv.style.display = 'none';
+                } else {
+                    existingProgramDiv.style.display = 'none';
+                    newProgramDiv.style.display = 'block';
+                }
+            });
+        });
+
+        // Toggle between existing and new section
+        const sectionRadios = document.querySelectorAll('input[name="section_option"]');
+        const existingSectionDiv = document.getElementById('existingSectionDiv');
+        const newSectionDiv = document.getElementById('newSectionDiv');
+        
+        sectionRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === 'existing') {
+                    existingSectionDiv.style.display = 'block';
+                    newSectionDiv.style.display = 'none';
+                } else {
+                    existingSectionDiv.style.display = 'none';
+                    newSectionDiv.style.display = 'block';
+                }
+            });
+        });
+
+        // Auto-generate code from new program name
+        const newProgramInput = document.getElementById('newProgram');
+        const newProgramCode = document.getElementById('newProgramCode');
+        
+        newProgramInput.addEventListener('input', function() {
+            if (!newProgramCode.value) {
+                // Auto-generate code from name
+                let code = this.value.toLowerCase()
+                    .replace(/[^a-z0-9]/g, '_')
+                    .substring(0, 10);
+                newProgramCode.value = code;
+            }
+        });
+
+        // Uppercase section letter
+        const newSectionInput = document.getElementById('newSection');
+        newSectionInput.addEventListener('input', function() {
+            this.value = this.value.toUpperCase();
+        });
+    </script>
+</body>
+</html>
